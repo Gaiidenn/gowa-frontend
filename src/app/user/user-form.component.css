@@ -1,0 +1,7 @@
+md-input, md-radio-group {
+    width: 100%;
+}
+.md-input-element {
+    background: none;
+    color: inherit;
+}

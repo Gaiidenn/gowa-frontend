@@ -1,3 +1,24 @@
-<h1>
-  {{title}}
-</h1>
+<md-toolbar color="primary">
+    <button md-icon-button (click)="start.toggle()"><md-icon>menu</md-icon></button>
+    <span class="flex">{{title}}</span>
+</md-toolbar>
+<md-sidenav-layout>
+    <md-sidenav #start align="start">
+        <md-toolbar>
+            Start Sidenav
+        </md-toolbar>
+        <md-list>
+            <md-list-item><a [routerLink]="['/dashboard']">Dashboard</a></md-list-item>
+            <md-list-item><a [routerLink]="['/todo']">Todo</a></md-list-item>
+        </md-list>
+    </md-sidenav>
+    <md-sidenav #end align="end" mode="side" opened="true">
+        <md-toolbar *ngIf="isUserRegistered()">
+            <span class="flex">Logged in as : {{_userService.user.Username}}</span>
+            <span><button md-icon-button type="button" (click)="logout()"><md-icon>exit_to_app</md-icon></button></span>
+        </md-toolbar>
+        <user-login *ngIf="!isUserRegistered()"></user-login>
+        <user-form></user-form>
+    </md-sidenav>
+    <router-outlet ></router-outlet>
+</md-sidenav-layout>
