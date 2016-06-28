@@ -8,6 +8,7 @@ import {MD_BUTTON_DIRECTIVES} from '@angular2-material/button';
 import {MD_TOOLBAR_DIRECTIVES} from '@angular2-material/toolbar';
 import {CookieService} from 'angular2-cookie/core';
 import {jsonrpcService} from './jsonrpc/jsonrpc.service';
+import {WS_BASE_URL} from './websocket-config';
 import {UserService} from './user/user.service';
 import {UserFormComponent} from './user/user-form.component';
 import {UserLoginComponent} from './user/user-login.component';
@@ -41,7 +42,7 @@ export class AppComponent {
     constructor(private _cookieService:CookieService,
                 private _rpc:jsonrpcService,
                 private _userService:UserService) {
-        let baseUrl = this.getBaseUrl();
+        let baseUrl = WS_BASE_URL;//this.getBaseUrl();
         this._rpc.newClient("ws://" + baseUrl + "/jsonrpc");
         this._rpc.newServer("ws://" + baseUrl + "/push");
 

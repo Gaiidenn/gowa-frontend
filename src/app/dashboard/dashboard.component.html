@@ -1,20 +1,22 @@
 <md-toolbar>
     <span>Dashboard</span>
 </md-toolbar>
-<md-card *ngIf="!_usersService.list">
-    Users list is loading...
-</md-card>
-<md-card *ngIf="_usersService.list && _usersService.list.length == 0">
-    No users to display
-</md-card>
-<md-card *ngFor="let user of _usersService.list">
-    <md-card-title>{{user.Username}}</md-card-title>
-    <md-card-content>
-        <md-list>
-            <md-list-item>{{user.Email}}</md-list-item>
-            <md-list-item>{{user.Age}}</md-list-item>
-            <md-list-item>{{user.Gender}}</md-list-item>
-        </md-list>
-    </md-card-content>
-</md-card>
-<div style="clear: both;"></div>
+<div class="md-card-container">
+    <md-card *ngIf="!_usersService.list">
+        Users list is loading...
+    </md-card>
+    <md-card *ngIf="_usersService.list && _usersService.list.length == 0">
+        No users to display
+    </md-card>
+    <md-card *ngFor="let user of _usersService.list">
+        <md-card-title>{{user.Username}}</md-card-title>
+        <md-card-content>
+            <md-list>
+                <md-list-item>{{user.Email}}</md-list-item>
+                <md-list-item>{{user.Age}}</md-list-item>
+                <md-list-item>{{user.Gender}}</md-list-item>
+            </md-list>
+        </md-card-content>
+    </md-card>
+    <div style="clear: both;"></div>
+</div>
