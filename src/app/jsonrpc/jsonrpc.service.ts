@@ -7,7 +7,7 @@ export class jsonrpcService{
     public client: jsonrpcClient;
     public server: jsonrpcServer;
 
-    newClient(addr: string): jsonrpcClient {
+    newClient(addr: string, initialMsg: string = ""): jsonrpcClient {
         this.client = {
             i: 0,
             maxRequest: this._maxRequest,
@@ -17,8 +17,8 @@ export class jsonrpcService{
         };
         this.client.ws.onMessage(this.onClientMessage.bind(this), null);
 
-        // Send a first empty message for initial handshake
-        this.client.ws.send("");
+        // Send a first message for initial handshake
+        this.client.ws.send(initialMsg);
         return this.client;
     }
 

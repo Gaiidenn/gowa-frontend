@@ -38,21 +38,20 @@ import {UserLoginComponent} from './user/user-login.component';
 })
 export class AppComponent {
     title = 'My GoWA2 APP !!';
+    token: string;
 
     constructor(private _cookieService:CookieService,
                 private _rpc:jsonrpcService,
                 private _userService:UserService) {
-        let baseUrl = WS_BASE_URL;//this.getBaseUrl();
-        this._rpc.newClient("ws://" + baseUrl + "/jsonrpc");
-        this._rpc.newServer("ws://" + baseUrl + "/push");
-
-        this._rpc.Register("App.log", this.log);
+        this._rpc.newServer("ws://" + WS_BASE_URL + "/push");
+        this._rpc.Register("App.setToken", this.setToken.bind(this));
     }
 
-    // TODO remove this once REAL rpcServer methods are implemented
-    log(message:string):string {
-        console.log("Yeaaaah test passed : " + message);
-        return "test passed!";
+    setToken(token: string): boolean {
+        this.token = token;
+        console.log("Token received : " + token);
+        this._rpc.newClient("ws://" + WS_BASE_URL + "/jsonrpc", this.token);
+        return true;
     }
 
     logout():void {
