@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {ROUTER_DIRECTIVES} from '@angular/router';
 import {MD_SIDENAV_DIRECTIVES,} from '@angular2-material/sidenav';
 import {MD_LIST_DIRECTIVES} from '@angular2-material/list';
+import {MD_GRID_LIST_DIRECTIVES} from '@angular2-material/grid-list';
 import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
 import {MdIcon, MdIconRegistry} from '@angular2-material/icon';
 import {MD_BUTTON_DIRECTIVES} from '@angular2-material/button';
@@ -23,6 +24,7 @@ import {UserLoginComponent} from './user/user-login.component';
         MD_SIDENAV_DIRECTIVES,
         MD_CARD_DIRECTIVES,
         MD_LIST_DIRECTIVES,
+        MD_GRID_LIST_DIRECTIVES,
         MdIcon,
         MD_BUTTON_DIRECTIVES,
         MD_TOOLBAR_DIRECTIVES,
@@ -51,6 +53,7 @@ export class AppComponent {
         this.token = token;
         console.log("Token received : " + token);
         this._rpc.newClient("ws://" + WS_BASE_URL + "/jsonrpc", this.token);
+        this._userService.newConnection();
         return true;
     }
 
@@ -62,7 +65,7 @@ export class AppComponent {
         return this._userService.isUserRegistered();
     }
 
-    private getBaseUrl():string {
+    private  getBaseUrl():string {
         let baseUrl = window.location.href;
         let prefix = "https://";
         if (baseUrl.indexOf(prefix) == 0) {

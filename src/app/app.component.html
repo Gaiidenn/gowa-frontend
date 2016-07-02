@@ -1,8 +1,14 @@
-<md-toolbar color="primary">
+<md-toolbar color="primary" style="height: 80px;">
     <button md-icon-button (click)="start.toggle()"><md-icon>menu</md-icon></button>
     <span class="flex">{{title}}</span>
+    <span *ngIf="isUserRegistered()">
+        <span class="flex">Logged in as : {{_userService.user.Username}}</span>
+        <span><button md-icon-button type="button" (click)="logout()"><md-icon>exit_to_app</md-icon></button></span>
+    </span>
+    <user-login *ngIf="!isUserRegistered()"></user-login>
 </md-toolbar>
 <md-sidenav-layout>
+    <user-form style="width: 96%"></user-form>
     <md-sidenav #start align="start">
         <md-toolbar>
             Start Sidenav
@@ -11,14 +17,6 @@
             <md-list-item><a [routerLink]="['/dashboard']">Dashboard</a></md-list-item>
             <md-list-item><a [routerLink]="['/todo']">Todo</a></md-list-item>
         </md-list>
-    </md-sidenav>
-    <md-sidenav #end align="end" mode="side" opened="true">
-        <md-toolbar *ngIf="isUserRegistered()">
-            <span class="flex">Logged in as : {{_userService.user.Username}}</span>
-            <span><button md-icon-button type="button" (click)="logout()"><md-icon>exit_to_app</md-icon></button></span>
-        </md-toolbar>
-        <user-login *ngIf="!isUserRegistered()"></user-login>
-        <user-form></user-form>
     </md-sidenav>
     <router-outlet ></router-outlet>
 </md-sidenav-layout>

@@ -4,6 +4,10 @@ md-sidenav {
     transition: all 1.5s ease;
 }
 
+md-toolbar {
+    justify-content: center;
+}
+
 md-content {
     min-height: 320px;
 }

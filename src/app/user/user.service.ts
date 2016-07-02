@@ -16,6 +16,18 @@ export class UserService {
         }
     }
 
+    newConnection() {
+        let username = this._cookieService.get("username");
+        let password = this._cookieService.get("password");
+        if (username && password) {
+            let userLogin: UserLogin = {
+                Username: username,
+                Password: password
+            };
+            this.login(userLogin);
+        }
+    }
+
     save() {
         this._rpc.Call("UserRPCService.Save", this.user, this.onSaveResponse.bind(this));
     }

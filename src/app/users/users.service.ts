@@ -26,7 +26,7 @@ export class UsersService  {
         console.log(list);
         let inList = false;
         for (let i in this.list) {
-            if (list[0].Username == this.list[i].Username) {
+            if (list[0]._key == this.list[i]._key) {
                 this.list[i] = list[0];
                 inList = true;
             }
