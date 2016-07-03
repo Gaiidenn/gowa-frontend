@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, Input} from '@angular/core';
 import {CookieService} from 'angular2-cookie/core';
 import {jsonrpcService} from '../jsonrpc/jsonrpc.service';
 import {User} from './user';
@@ -6,17 +6,20 @@ import {User} from './user';
 @Injectable()
 export class UserService {
     public user: User;
+    public registrationStatus: number = STATUS_ANONYMOUS;
+    private _token: string;
 
     constructor(
         private _cookieService: CookieService,
         private _rpc: jsonrpcService
     ) {
         if (!this.user){
-            this.user = this.initUser();
+            this.user = this.newUser();
         }
     }
 
-    newConnection() {
+    newConnection(token: string) {
+        this._token = token;
         let username = this._cookieService.get("username");
         let password = this._cookieService.get("password");
         if (username && password) {
@@ -29,7 +32,17 @@ export class UserService {
     }
 
     save() {
-        this._rpc.Call("UserRPCService.Save", this.user, this.onSaveResponse.bind(this));
+        interface Params {
+            Token: string;
+            User: User;
+        };
+        let params: Params = {
+            Token: this._token,
+            User: this.user
+        };
+        console.log(this._token);
+        console.log(params);
+        this._rpc.Call("UserRPCService.Save", params, this.onSaveResponse.bind(this));
     }
     onSaveResponse(result: any, error: any) {
         if (error != null) {
@@ -58,7 +71,7 @@ export class UserService {
     }
 
     logout(): void {
-        this.user = this.initUser();
+        this.user = this.newUser();
         this._cookieService.put("username", null);
         this._cookieService.put("password", null);
     }
@@ -70,7 +83,28 @@ export class UserService {
         return this.user._id ? true : false;
     }
 
-    private initUser(): User {
+    setUsername(username: string) {
+        this.user.Username = username;
+    }
+
+    stepUpStatus(): boolean {
+        switch (this.registrationStatus) {
+            case STATUS_ANONYMOUS :
+                if (this.user.Username.length > 3) {
+                    this.save();
+                    this.registrationStatus = STATUS_NAMED;
+                    return true;
+                }
+                break;
+            case STATUS_NAMED :
+                break;
+            case STATUS_PROFILED :
+                break;
+        }
+        return false;
+    }
+
+    newUser(): User {
         return {
             Username: "",
             Password: "",
@@ -90,3 +124,7 @@ export interface UserLogin {
     Username: string;
     Password: string;
 }
+
+export const STATUS_ANONYMOUS = 0;
+export const STATUS_NAMED = 1;
+export const STATUS_PROFILED = 2;

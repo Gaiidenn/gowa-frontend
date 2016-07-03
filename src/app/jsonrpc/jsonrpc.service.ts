@@ -83,17 +83,30 @@ export class jsonrpcService{
     onServerMessage(message: any): void {
         var response: jsonrpcResponse;
         var data: string;
-	var d: jsonrpcRequest;
+	    var d: jsonrpcRequest;
         d = JSON.parse(message.data);
 
         for (var i = 0; i < this.server.i; i++) {
             if (this.server.method[i].method == d.method) {
-                var result = this.server.method[i].func(d.params);
+                var fn = this.server.method[i].func;
+                if (typeof fn === "function") {
+                    var result = fn.apply(null, d.params);
+                    response = {
+                        id: d.id,
+                        result: result
+                    };
+                    console.log(response);
+                    data = JSON.stringify(response);
+                    this.server.ws.send(data);
+                    return;
+                }
                 response = {
                     id: d.id,
-                    result: result
+                    error: {
+                        code: -32000,
+                        message: 'Method registered but is not a function'
+                    }
                 };
-                console.log(response);
                 data = JSON.stringify(response);
                 this.server.ws.send(data);
                 return;

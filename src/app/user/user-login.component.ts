@@ -1,4 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core'
+import {Component, Input, OnInit} from '@angular/core';
+import {NgForm} from '@angular/common';
 import {CookieService} from 'angular2-cookie/core';
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
 import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
@@ -6,7 +7,7 @@ import {MD_LIST_DIRECTIVES} from '@angular2-material/list';
 import {MdToolbar} from '@angular2-material/toolbar';
 import {MdButton} from '@angular2-material/button';
 import {jsonrpcService} from '../jsonrpc/jsonrpc.service';
-import {User} from './user';
+
 import {UserService, UserLogin} from './user.service';
 
 @Component({
@@ -23,21 +24,21 @@ import {UserService, UserLogin} from './user.service';
 })
 export class UserLoginComponent implements OnInit {
 
-    userLogin: UserLogin = {
-        Username: "",
-        Password: ""
-    };
+    userLogin: UserLogin;
 
     constructor(
         private _rpc: jsonrpcService,
         private _cookieService: CookieService,
         private _userService: UserService
     ) {
-
+        this.userLogin = {
+            Username: "",
+            Password: ""
+        };
     }
 
     ngOnInit() {
-        
+
     }
 
     submit() {

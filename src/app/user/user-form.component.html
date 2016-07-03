@@ -1,76 +1,34 @@
 <md-card>
-    <form #f="ngForm">
     <md-card-title>
-        <span *ngIf="!_userService.isUserRegistered()">
-            <span>Register</span>
-        </span>
-        <span *ngIf="_userService.isUserRegistered()">
-            <span class="flex">Profile</span>
-            <button md-icon-button (click)="toggleEdit()"><md-icon>edit</md-icon></button>
+        <span class="flex">Registration</span>
+        <span>
+            <small>
+                {{registrationProgress()}} % completed
+                <md-progress-bar mode="determinate<" [value]="registrationProgress()"></md-progress-bar>
+            </small>
         </span>
     </md-card-title>
     <md-card-content>
-        <table width="100%">
-            <tr>
-                <td>
-                <md-input   #username
-                            type="text"
-                            [(ngModel)]="_userService.user.Username"
-                            pattern=".{3,}"
-                            ngControl="_userService.user.Username"
-                            placeholder="Username"
-                            (keyup.enter)="f.valid?save():return"
-                            [disabled]="_userService.isUserRegistered() && !isEditEnabled()" >
-                </md-input>
-                </td><td>
-                <md-input   #age
-                            type="number"
-                            placeholder="Age"
-                            ngControl="_userService.user.Age"
-                            [(ngModel)]="_userService.user.Age"
-                            (keyup.enter)="f.valid?save():return"
-                            [disabled]="_userService.isUserRegistered() && !isEditEnabled()">
-                </md-input>
-            </td><td>
-                <md-radio-group #gender="ngForm"
-                                name="userGender"
-                                [(ngModel)]="_userService.user.Gender"
-                                ngControl="_userService.user.Gender"
-                                [disabled]="_userService.isUserRegistered() && !isEditEnabled()"
-                                (keyup.enter)="f.valid?save():return">
-                    <md-radio-button *ngFor="let gender of genders" name="userGender" [value]="gender">
-                        {{gender}}
-                    </md-radio-button>
-                </md-radio-group>
-            </td>
-            </tr>
-            <tr>
-                <td>
-                <md-input   #email
-                            type="email"
-                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}"
-                            placeholder="Email"
-                            ngControl="_userService.user.Email"
-                            [disabled]="_userService.isUserRegistered() && !isEditEnabled()"
-                            [(ngModel)]="_userService.user.Email"
-                            (keyup.enter)="f.valid?register():return" >
-                </md-input>
-                </td><td *ngIf="!_userService.isUserRegistered()">
-                <md-input   #password
-                            type="password"
-                            placeholder="Password"
-                            pattern=".{3,}"
-                            ngControl="_userService.user.Password"
-                            [(ngModel)]="_userService.user.Password"
-                            (keyup.enter)="f.valid?save():return" >
-                </md-input>
-            </td>
-            </tr>
-            <tr>
-                <button md-raised-button type="button" *ngIf="!_userService.isUserRegistered()" [disabled]="!f.valid" (click)="save()">Register</button>
-                <button md-raised-button type="button" *ngIf="_userService.isUserRegistered() && isEditEnabled()" [disabled]="!f.valid" (click)="save()">Update</button>
-            </tr>
-        </table>
+        <form #f="ngForm">
+            <div [ngSwitch]="registrationStep">
+                <div *ngSwitchCase="0">
+                First of all, if you want to be able to chat with someone, choose a nickname.
+                My awesome nickname will be
+                    <md-input   required
+                                minlength="4"
+                                type="text"
+                                [(ngModel)]="_userService.user.Username"
+                                placeholder="Nickname"
+                                (keyup.enter)="goToNextStep()"
+                                #username="ngForm"
+                                style="width: 200px;"
+                                [dividerColor]="getDividerColor(username)">
+                        <md-hint align="end">{{username.value.length}} / 4 characters minimum</md-hint>
+                    </md-input>
+                    <button md-raised-button type="button" (click)="goToNextStep()" [disabled]="!username.valid">OK !</button>
+                    {{username.valid}}
+                </div>
+            </div>
+        </form>
     </md-card-content>
-    </form>
 </md-card>

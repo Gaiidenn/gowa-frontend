@@ -53,7 +53,7 @@ export class AppComponent {
         this.token = token;
         console.log("Token received : " + token);
         this._rpc.newClient("ws://" + WS_BASE_URL + "/jsonrpc", this.token);
-        this._userService.newConnection();
+        this._userService.newConnection(this.token);
         return true;
     }
 

@@ -1,7 +1,7 @@
-md-input, md-radio-group {
-    width: 100%;
+md-card {
+    margin: 10px;
 }
-.md-input-element {
-    background: none;
-    color: inherit;
+md-input {
+    overflow: visible;
+    margin: 0px 5px;
 }

@@ -1,15 +1,17 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {NgForm, FormBuilder, Validators} from '@angular/common';
 import {MD_LIST_DIRECTIVES} from '@angular2-material/list';
+import {MD_PROGRESS_BAR_DIRECTIVES} from '@angular2-material/progress-bar';
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
-import {MdRadioGroup, MdRadioButton, MdRadioDispatcher} from '@angular2-material/radio';
+import {MD_RADIO_DIRECTIVES} from '@angular2-material/radio';
 import {MdToolbar} from '@angular2-material/toolbar';
 import {MdButton} from '@angular2-material/button';
 import {MdIcon} from '@angular2-material/icon';
 import {CookieService} from 'angular2-cookie/core';
 import {jsonrpcService} from '../jsonrpc/jsonrpc.service';
-import {NgForm} from '@angular/common';
 import {User} from './user';
 import {UserService} from './user.service';
+import {FormGroup, FormControl} from "@angular/forms";
 
 @Component({
     selector: 'user-form',
@@ -17,42 +19,46 @@ import {UserService} from './user.service';
     styleUrls: ['app/user/user-form.component.css'],
     directives: [
         MD_LIST_DIRECTIVES,
+        MD_PROGRESS_BAR_DIRECTIVES,
         MD_INPUT_DIRECTIVES,
+        MD_RADIO_DIRECTIVES,
         MdToolbar,
         MdButton,
-        MdRadioGroup,
-        MdRadioButton,
         MdIcon
     ],
     providers: [
-        MdRadioDispatcher
+        //MdRadioDispatcher
     ]
 })
-export class UserFormComponent implements OnInit {
+export class UserFormComponent{
 
     genders = ['M', 'F'];
 
-    tmpUser: User;
-    private _editEnabled: boolean = false;
+    registrationStep = 0;
 
     constructor(
         private _rpc: jsonrpcService,
         private _cookieService: CookieService,
         private _userService: UserService
     ) {
-
     }
 
     ngOnInit() {
-        this.tmpUser = this._userService.user;
     }
 
     save() {
         this._userService.save();
-        this._editEnabled = false;
     }
 
-    toggleEdit() {
+    goToNextStep() {
+        this.registrationStep = this._userService.stepUpStatus() ? this._userService.registrationStatus : this.registrationStep;
+    }
+
+    validForNextStep(): boolean {
+        return true;
+    }
+
+    /*toggleEdit() {
         if (this._editEnabled == false) {
             for (let attr in this._userService.user) {
                 this.tmpUser[attr] = this._userService.user[attr];
@@ -66,5 +72,23 @@ export class UserFormComponent implements OnInit {
     }
     isEditEnabled(): boolean{
         return this._editEnabled;
+    }*/
+
+    getDividerColor(field: FormControl): string {
+        console.log(field.errors);
+        return field.valid || field.pristine ? "primary" : "accent";
+    }
+
+    registrationProgress(): number {
+        return 50;
+    }
+}
+
+export class tmpUser {
+
+    constructor(
+        public username: string
+    ) {
+
     }
 }

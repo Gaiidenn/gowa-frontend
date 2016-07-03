@@ -10,3 +10,4 @@ export interface User {
     _rev: string;
     _key: string;
 }
+
