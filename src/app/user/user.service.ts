@@ -6,6 +6,7 @@ import {User} from './user';
 export const STATUS_ANONYMOUS = 0;
 export const STATUS_NAMED = 1;
 export const STATUS_PROFILED = 2;
+export const STATUS_REGISTERED = 3;
 
 @Injectable()
 export class UserService {
@@ -20,6 +21,7 @@ export class UserService {
         if (!this.user){
             this.user = this.newUser();
         }
+        this.checkStatus()
     }
 
     newConnection(token: string) {
@@ -87,19 +89,23 @@ export class UserService {
         this.user.Username = username;
     }
 
-    checkStatus(): boolean {
+    checkStatus(): number {
         switch (this.registrationStatus) {
             case STATUS_ANONYMOUS :
                 if (this.user.Username.length > 3) {
                     this.registrationStatus = STATUS_NAMED;
                 }
-                break;
             case STATUS_NAMED :
-                break;
+                if (this.user.Profile.Age != null && this.user.Profile.Gender != "") {
+                    this.registrationStatus = STATUS_PROFILED;
+                }
             case STATUS_PROFILED :
+                if (this.user._key != null) {
+                    this.registrationStatus = STATUS_REGISTERED;
+                }
                 break;
         }
-        return false;
+        return this.registrationStatus;
     }
 
     newUser(): User {
@@ -107,10 +113,13 @@ export class UserService {
             Username: "",
             Password: "",
             Email: "",
-            Gender: "",
+            Profile: {
+                Age: null,
+                Gender: "",
+                Description: ""
+            },
             Likes: [],
             Meets: [],
-            Age: null,
             _id: null,
             _rev: null,
             _key: null

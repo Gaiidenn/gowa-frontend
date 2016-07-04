@@ -41,7 +41,7 @@ export class UserFormComponent{
         private _cookieService: CookieService,
         private _userService: UserService
     ) {
-        this.registrationStep = this._userService.registrationStatus;
+        this.registrationStep = this._userService.checkStatus();
     }
 
     goToNextStep() {

@@ -2,12 +2,16 @@ export interface User {
     Username: string;
     Password: string;
     Email: string;
-    Gender: string;
+    Profile: UserProfile;
     Likes: Array<string>;
     Meets: Array<string>;
-    Age: number;
     _id: string;
     _rev: string;
     _key: string;
 }
 
+export interface UserProfile {
+    Age: number;
+    Gender: string;
+    Description: string;
+}
