@@ -3,6 +3,10 @@ import {CookieService} from 'angular2-cookie/core';
 import {jsonrpcService} from '../jsonrpc/jsonrpc.service';
 import {User} from './user';
 
+export const STATUS_ANONYMOUS = 0;
+export const STATUS_NAMED = 1;
+export const STATUS_PROFILED = 2;
+
 @Injectable()
 export class UserService {
     public user: User;
@@ -31,7 +35,7 @@ export class UserService {
         }
     }
 
-    save() {
+    save(): any {
         interface Params {
             Token: string;
             User: User;
@@ -40,15 +44,16 @@ export class UserService {
             Token: this._token,
             User: this.user
         };
-        console.log(this._token);
-        console.log(params);
-        this._rpc.PromiseCall("UserRPCService.Save", params).then(user => {
-            this.user = user;
-            if (this.user.Username) this._cookieService.put("username", this.user.Username);
-            if (this.user.Password) this._cookieService.put("password", this.user.Password);
-            this.checkStatus();
-        }).catch(error => {
-            console.log(error);
+        return new Promise((resolve, reject) => {
+            this._rpc.PromiseCall("UserRPCService.Save", params).then(user => {
+                this.user = user;
+                if (this.user.Username) this._cookieService.put("username", this.user.Username);
+                if (this.user.Password) this._cookieService.put("password", this.user.Password);
+                this.checkStatus();
+                resolve();
+            }).catch(error => {
+                reject(error);
+            });
         });
     }
 
@@ -75,7 +80,7 @@ export class UserService {
         if (!this.user) {
             return false;
         }
-        return this.user._id ? true : false;
+        return !!this.user._key;
     }
 
     setUsername(username: string) {
@@ -117,7 +122,3 @@ export interface UserLogin {
     Username: string;
     Password: string;
 }
-
-export const STATUS_ANONYMOUS = 0;
-export const STATUS_NAMED = 1;
-export const STATUS_PROFILED = 2;

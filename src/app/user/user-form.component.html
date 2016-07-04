@@ -31,4 +31,8 @@
             </div>
         </form>
     </md-card-content>
+    <md-card-actions>
+        <button md-raised-button (click)="registrationStepBackward()" [disabled]="registrationStep == 0">Step back</button>
+        <button md-raised-button (click)="registrationStepForward()" [disabled]="registrationStep >= _userService.registrationStatus">Step forward</button>
+    </md-card-actions>
 </md-card>

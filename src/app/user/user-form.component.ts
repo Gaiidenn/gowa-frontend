@@ -41,18 +41,16 @@ export class UserFormComponent{
         private _cookieService: CookieService,
         private _userService: UserService
     ) {
-    }
-
-    ngOnInit() {
+        this.registrationStep = this._userService.registrationStatus;
     }
 
     goToNextStep() {
-        //this.registrationStep = this._userService.stepUpStatus() ? this._userService.registrationStatus : this.registrationStep;
-        this._userService.save();
-    }
-
-    validForNextStep(): boolean {
-        return true;
+        let self = this;
+        this._userService.save().then(() => {
+            self.registrationStep = self._userService.registrationStatus;
+        }).catch( error => {
+            console.log(error);
+        });
     }
 
     getDividerColor(field: FormControl): string {
@@ -61,5 +59,15 @@ export class UserFormComponent{
 
     registrationProgress(): number {
         return 50;
+    }
+
+    registrationStepBackward() {
+        if (this.registrationStep > 0) {
+            this.registrationStep--;
+        }
+    }
+
+    registrationStepForward() {
+        this.registrationStep++;
     }
 }

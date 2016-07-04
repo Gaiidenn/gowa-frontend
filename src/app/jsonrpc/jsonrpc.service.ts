@@ -51,10 +51,10 @@ export class jsonrpcService{
 
     PromiseCall(method: string, params: any): Promise<any> {
         let self = this;
-        return new Promise(function(fulfill, reject) {
+        return new Promise(function(success, reject) {
             self.Call(method, params, function(result, error) {
                 if (error) reject(error);
-                else fulfill(result);
+                else success(result);
             });
         });
     }

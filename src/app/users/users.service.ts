@@ -10,24 +10,20 @@ export class UsersService  {
         private _rpc: jsonrpcService
     ) {
         this._rpc.Register("UsersService.updateList", this.updateList.bind(this));
-       // this._rpc.Call("UserRPCService.GetAll", "", this.setUsers.bind(this));
         this._rpc.PromiseCall("UserRPCService.GetAll", "").then(users => this.list = users).catch(error => console.log(error));
     }
 
-    updateList(list: Array<User>) {
-        if (list.length == 0) {
-            return "{error: 'no users received'}";
-        }
-        console.log(list);
+    updateList(user: User) {
+        console.log(user);
         let inList = false;
         for (let i in this.list) {
-            if (list[0]._key == this.list[i]._key) {
-                this.list[i] = list[0];
+            if (user._key && user._key == this.list[i]._key) {
+                this.list[i] = user;
                 inList = true;
             }
         }
         if (inList == false) {
-            this.list.push(list[0]);
+            this.list.push(user);
         }
         return "ok";
     }
