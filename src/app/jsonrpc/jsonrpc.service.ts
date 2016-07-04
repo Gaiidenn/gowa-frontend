@@ -23,8 +23,8 @@ export class jsonrpcService{
     }
 
     Call(method: string, params: any, callback?: Function): void {
-        var data: string;
-        var dataObj: jsonrpcRequest;
+        let data: string;
+        let dataObj: jsonrpcRequest;
 
         while (this.client.request[this.client.i] != null) {
             this.client.i++;
@@ -49,8 +49,18 @@ export class jsonrpcService{
         this.client.request[this.client.i] = dataObj;
     }
 
+    PromiseCall(method: string, params: any): Promise<any> {
+        let self = this;
+        return new Promise(function(fulfill, reject) {
+            self.Call(method, params, function(result, error) {
+                if (error) reject(error);
+                else fulfill(result);
+            });
+        });
+    }
+
     onClientMessage(message: any): void {
-        var data = JSON.parse(message.data);
+        let data = JSON.parse(message.data);
         if (this.client.request[data.id].callback != null) {
             this.client.request[data.id].callback(data.result, data.error);
         }
@@ -81,16 +91,16 @@ export class jsonrpcService{
     }
 
     onServerMessage(message: any): void {
-        var response: jsonrpcResponse;
-        var data: string;
-	    var d: jsonrpcRequest;
+        let response: jsonrpcResponse;
+        let data: string;
+	    let d: jsonrpcRequest;
         d = JSON.parse(message.data);
 
-        for (var i = 0; i < this.server.i; i++) {
+        for (let i = 0; i < this.server.i; i++) {
             if (this.server.method[i].method == d.method) {
-                var fn = this.server.method[i].func;
+                let fn = this.server.method[i].func;
                 if (typeof fn === "function") {
-                    var result = fn.apply(null, d.params);
+                    let result = fn.apply(null, d.params);
                     response = {
                         id: d.id,
                         result: result

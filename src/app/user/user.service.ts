@@ -44,7 +44,7 @@ export class UserService {
         console.log(params);
         this._rpc.Call("UserRPCService.Save", params, this.onSaveResponse.bind(this));
     }
-    onSaveResponse(result: any, error: any) {
+    onSaveResponse(result: User, error: any) {
         if (error != null) {
             console.log(error);
             return;

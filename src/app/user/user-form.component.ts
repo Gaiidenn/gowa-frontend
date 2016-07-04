@@ -56,7 +56,6 @@ export class UserFormComponent{
     }
 
     getDividerColor(field: FormControl): string {
-        console.log(field.errors);
         return field.valid || field.pristine ? "primary" : "accent";
     }
 
