@@ -65,8 +65,7 @@ export class UserService {
             this.user = result;
             this._cookieService.put("username", this.user.Username);
             this._cookieService.put("password", this.user.Password);
-            console.log(this.user);
-            console.log(this.isUserRegistered());
+            this.registrationStatus = STATUS_REGISTERED;
         }).catch(error => {
             console.log(error);
         });
@@ -76,6 +75,7 @@ export class UserService {
         this.user = this.newUser();
         this._cookieService.put("username", null);
         this._cookieService.put("password", null);
+        this.registrationStatus = STATUS_ANONYMOUS;
     }
 
     isUserRegistered(): boolean {
@@ -114,7 +114,7 @@ export class UserService {
             Password: "",
             Email: "",
             Profile: {
-                Age: null,
+                Age: 18,
                 Gender: "",
                 Description: ""
             },

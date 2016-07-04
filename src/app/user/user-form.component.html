@@ -21,18 +21,27 @@
                                 placeholder="Nickname"
                                 (keyup.enter)="goToNextStep()"
                                 #username="ngForm"
-                                style="width: 200px;"
+                                style="width: 180px;"
                                 [dividerColor]="getDividerColor(username)">
                         <md-hint align="end">{{username.value.length}} / 4 characters minimum</md-hint>
                     </md-input>
-                    <button md-raised-button type="button" (click)="goToNextStep()" [disabled]="!username.valid">OK !</button>
-                    {{username.valid}}
+                    <button md-raised-button type="button" (click)="goToNextStep()" [disabled]="!username.valid">Connect !</button>
                 </div>
                 <div *ngSwitchCase="1">
-                    Good to see you {{user.Username}} !! You are now able to chat with other people !
-                    You can give more infos about you to increase your popularity :
+                    Good to see you <b>{{_userService.user.Username}}</b> !! You are now able to chat with other people !
+                    <br>You can give more infos about you to increase your popularity :
+                    " I am a
+                    <md-radio-group required
+                                    placeholder="Gender"
+                                    [(ngModel)]="_userService.user.Profile.Gender"
+                                    (keyup.enter)="description.focus()"
+                                    style="width: 100px;"
+                                    #gender="ngForm">
+                        <md-radio-button *ngFor="let g of genders" [value]="g.key" style="margin-left: 5px;">{{g.value}}</md-radio-button>
+                    </md-radio-group>
+                    of
                     <md-input   required
-                                type="text"
+                                type="number"
                                 [(ngModel)]="_userService.user.Profile.Age"
                                 placeholder="Age"
                                 (keyup.enter)="gender.focus()"
@@ -40,22 +49,50 @@
                                 style="width: 50px;"
                                 [dividerColor]="getDividerColor(age)">
                     </md-input>
-                    <md-radio-group required
-                                    [(ngModel)]="_userService.user.Profile.Gender"
-                                    (keyup.enter)="description.focus()"
-                                    #gender="ngForm">
-                        <md-radio-button *ngFor="let g of genders" [value]="g">{{g}}</md-radio-button>
-                    </md-radio-group>
-                    <md-input   type="text"
+                    years old. "
+                    <br>
+                    " To shortly describe myself, I could say that I am
+                    <md-input   type="textarea"
                                 [(ngModel)]="_userService.user.Profile.Description"
                                 placeholder="Description"
                                 (keyup.enter)="goToNextStep()"
                                 #description="ngForm"
-                                style="width: 250px;"
+                                style="width: 450px;"
                                 [dividerColor]="getDividerColor(description)">
+                    </md-input> ! "
+                    <button md-raised-button type="button" (click)="goToNextStep()" [disabled]="!age.valid || !gender.valid">Tell people who I am !</button>
+                </div>
+                <div *ngSwitchCase="2">
+                    Great ! Your profile looks sexier now, for sure ! If you want to keep your nickname and your statistics
+                    (number of likes, number of people met, ...), feel free to register !
+                    <br>
+                    <md-input   required
+                                type="email"
+                                [(ngModel)]="_userService.user.Email"
+                                placeholder="Email"
+                                (keyup.enter)="password.focus()"
+                                #email="ngForm"
+                                style="width: 180px;margin-right: 5px;"
+                                [dividerColor]="getDividerColor(email)">
                     </md-input>
-                    <button md-raised-button type="button" (click)="goToNextStep()" [disabled]="!username.valid">OK !</button>
-                    {{username.valid}}
+                    <md-input   required
+                                minlength="4"
+                                type="password"
+                                [(ngModel)]="_userService.user.Password"
+                                placeholder="Password"
+                                (keyup.enter)="goToNextStep()"
+                                #password="ngForm"
+                                style="width: 180px;"
+                                [dividerColor]="getDividerColor(password)">
+                    </md-input>
+                    <button md-raised-button type="button" (click)="goToNextStep()" [disabled]="!email.valid || !password.valid">Register !</button>
+                </div>
+                <div *ngSwitchCase="3">
+                    Congratulations <b>{{_userService.user.Username}}</b> ! You are now a member of our incridible community !
+                    ENJOY !
+                </div>
+                <div *ngSwitchDefault>
+                    OOPS ! It seems that something gone wrong ! (Unknown USER STATE)
                 </div>
             </div>
         </form>
