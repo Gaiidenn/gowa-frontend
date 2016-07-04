@@ -51,7 +51,6 @@ export class AppComponent {
 
     setToken(token: string): boolean {
         this.token = token;
-        console.log("Token received : " + token);
         this._rpc.newClient("ws://" + WS_BASE_URL + "/jsonrpc", this.token);
         this._userService.newConnection(this.token);
         return true;

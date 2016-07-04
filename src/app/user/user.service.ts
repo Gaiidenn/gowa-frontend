@@ -42,33 +42,27 @@ export class UserService {
         };
         console.log(this._token);
         console.log(params);
-        this._rpc.Call("UserRPCService.Save", params, this.onSaveResponse.bind(this));
-    }
-    onSaveResponse(result: User, error: any) {
-        if (error != null) {
+        this._rpc.PromiseCall("UserRPCService.Save", params).then(user => {
+            this.user = user;
+            if (this.user.Username) this._cookieService.put("username", this.user.Username);
+            if (this.user.Password) this._cookieService.put("password", this.user.Password);
+            this.checkStatus();
+        }).catch(error => {
             console.log(error);
-            return;
-        }
-        this.user = result;
-        if (this.user.Username) this._cookieService.put("username", this.user.Username);
-        if (this.user.Password) this._cookieService.put("password", this.user.Password);
-        this.checkStatus();
+        });
     }
 
     login(userLogin: UserLogin) {
-        this._rpc.Call("UserRPCService.Login", userLogin, this.loginResponse.bind(this));
-    }
-    loginResponse(result: any, error: any) {
-        if (error != null) {
+        this._rpc.PromiseCall("UserRPCService.Login", userLogin).then(result => {
+            console.log(JSON.stringify(result));
+            this.user = result;
+            this._cookieService.put("username", this.user.Username);
+            this._cookieService.put("password", this.user.Password);
+            console.log(this.user);
+            console.log(this.isUserRegistered());
+        }).catch(error => {
             console.log(error);
-            return;
-        }
-        console.log(JSON.stringify(result));
-        this.user = result;
-        this._cookieService.put("username", this.user.Username);
-        this._cookieService.put("password", this.user.Password);
-        console.log(this.user);
-        console.log(this.isUserRegistered());
+        });
     }
 
     logout(): void {
