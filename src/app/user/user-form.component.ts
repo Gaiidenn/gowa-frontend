@@ -46,33 +46,14 @@ export class UserFormComponent{
     ngOnInit() {
     }
 
-    save() {
-        this._userService.save();
-    }
-
     goToNextStep() {
-        this.registrationStep = this._userService.stepUpStatus() ? this._userService.registrationStatus : this.registrationStep;
+        //this.registrationStep = this._userService.stepUpStatus() ? this._userService.registrationStatus : this.registrationStep;
+        this._userService.save();
     }
 
     validForNextStep(): boolean {
         return true;
     }
-
-    /*toggleEdit() {
-        if (this._editEnabled == false) {
-            for (let attr in this._userService.user) {
-                this.tmpUser[attr] = this._userService.user[attr];
-            }
-        } else {
-            for (let attr in this._userService.user) {
-                this._userService.user[attr] = this.tmpUser[attr];
-            }
-        }
-        this._editEnabled = !this._editEnabled;
-    }
-    isEditEnabled(): boolean{
-        return this._editEnabled;
-    }*/
 
     getDividerColor(field: FormControl): string {
         console.log(field.errors);
@@ -81,14 +62,5 @@ export class UserFormComponent{
 
     registrationProgress(): number {
         return 50;
-    }
-}
-
-export class tmpUser {
-
-    constructor(
-        public username: string
-    ) {
-
     }
 }

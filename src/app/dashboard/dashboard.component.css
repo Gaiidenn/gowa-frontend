@@ -1,3 +1,6 @@
+md-card {
+    margin: 10px;
+}
 .md-card-container {
     display: flex;
     width: 100%;
@@ -5,9 +8,8 @@
     flex-wrap: wrap;
     justify-content: flex-start;
 }
-md-card {
+.md-card-container md-card {
     min-width: 250px;
     max-width: 300px;
-    margin: 10px;
     transition: position 0.5s ease-in-out;
 }

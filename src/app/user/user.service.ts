@@ -50,8 +50,9 @@ export class UserService {
             return;
         }
         this.user = result;
-        this._cookieService.put("username", this.user.Username);
-        this._cookieService.put("password", this.user.Password);
+        if (this.user.Username) this._cookieService.put("username", this.user.Username);
+        if (this.user.Password) this._cookieService.put("password", this.user.Password);
+        this.checkStatus();
     }
 
     login(userLogin: UserLogin) {
@@ -87,13 +88,11 @@ export class UserService {
         this.user.Username = username;
     }
 
-    stepUpStatus(): boolean {
+    checkStatus(): boolean {
         switch (this.registrationStatus) {
             case STATUS_ANONYMOUS :
                 if (this.user.Username.length > 3) {
-                    this.save();
                     this.registrationStatus = STATUS_NAMED;
-                    return true;
                 }
                 break;
             case STATUS_NAMED :
