@@ -67,7 +67,7 @@ export class jsonrpcService{
         this.client.request[data.id] = null;
     }
 
-    newServer(addr: string): jsonrpcServer {
+    newServer(addr: string, initialMsg: string = "nil"): jsonrpcServer {
         this.server = {
             i: 0,
             method: [],
@@ -77,7 +77,7 @@ export class jsonrpcService{
         this.server.ws.onMessage(this.onServerMessage.bind(this), null);
 
         // Send a first empty message for initial handshake
-        let test = this.server.ws.send("");
+        let test = this.server.ws.send(initialMsg);
         console.log(test);
         return this.server;
     }

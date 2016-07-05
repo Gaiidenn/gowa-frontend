@@ -10,14 +10,17 @@ export class UsersService  {
         private _rpc: jsonrpcService
     ) {
         this._rpc.Register("UsersService.updateList", this.updateList.bind(this));
-        this._rpc.PromiseCall("UserRPCService.GetAll", "").then(users => this.list = users).catch(error => console.log(error));
+        this._rpc.Register("UsersService.removeFromList", this.removeFromList.bind(this));
+        this._rpc.PromiseCall("UserRPCService.GetAll", "")
+            .then(users => this.list = users)
+            .catch(error => console.log(error));
     }
 
     updateList(user: User) {
         console.log(user);
         let inList = false;
         for (let i in this.list) {
-            if (user._key && user._key == this.list[i]._key) {
+            if (user.Token == this.list[i].Token) {
                 this.list[i] = user;
                 inList = true;
             }
@@ -26,5 +29,13 @@ export class UsersService  {
             this.list.push(user);
         }
         return "ok";
+    }
+
+    removeFromList(token: string) {
+        for (let i in this.list) {
+            if (this.list[i].Token == token) {
+                delete this.list[i]
+            }
+        }
     }
 }

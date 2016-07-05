@@ -40,19 +40,21 @@ import {UserLoginComponent} from './user/user-login.component';
 })
 export class AppComponent {
     title = 'My GoWA2 APP !!';
-    token: string;
 
     constructor(private _cookieService:CookieService,
                 private _rpc:jsonrpcService,
                 private _userService:UserService) {
-        this._rpc.newServer("ws://" + WS_BASE_URL + "/push");
+        if (this._userService.user.Token && this._userService.user.Token != "") {
+            this._rpc.newServer("ws://" + WS_BASE_URL + "/push", this._userService.user.Token);
+        } else {
+            this._rpc.newServer("ws://" + WS_BASE_URL + "/push");
+        }
         this._rpc.Register("App.setToken", this.setToken.bind(this));
     }
 
     setToken(token: string): boolean {
-        this.token = token;
-        this._rpc.newClient("ws://" + WS_BASE_URL + "/jsonrpc", this.token);
-        this._userService.newConnection(this.token);
+        this._rpc.newClient("ws://" + WS_BASE_URL + "/jsonrpc", token);
+        this._userService.newConnection(token);
         return true;
     }
 

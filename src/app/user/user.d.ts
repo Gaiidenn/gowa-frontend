@@ -1,8 +1,10 @@
 export interface User {
+    Token: string;
     Username: string;
     Password: string;
     Email: string;
     Profile: UserProfile;
+    Connected: boolean;
     Likes: Array<string>;
     Meets: Array<string>;
     _id: string;

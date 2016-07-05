@@ -12,7 +12,6 @@ export const STATUS_REGISTERED = 3;
 export class UserService {
     public user: User;
     public registrationStatus: number = STATUS_ANONYMOUS;
-    private _token: string;
 
     constructor(
         private _cookieService: CookieService,
@@ -25,7 +24,7 @@ export class UserService {
     }
 
     newConnection(token: string) {
-        this._token = token;
+        this.user.Token = token;
         let username = this._cookieService.get("username");
         let password = this._cookieService.get("password");
         if (username && password) {
@@ -38,16 +37,8 @@ export class UserService {
     }
 
     save(): any {
-        interface Params {
-            Token: string;
-            User: User;
-        };
-        let params: Params = {
-            Token: this._token,
-            User: this.user
-        };
         return new Promise((resolve, reject) => {
-            this._rpc.PromiseCall("UserRPCService.Save", params).then(user => {
+            this._rpc.PromiseCall("UserRPCService.Save", this.user).then(user => {
                 this.user = user;
                 if (this.user.Username) this._cookieService.put("username", this.user.Username);
                 if (this.user.Password) this._cookieService.put("password", this.user.Password);
@@ -110,6 +101,7 @@ export class UserService {
 
     newUser(): User {
         return {
+            Token: "",
             Username: "",
             Password: "",
             Email: "",
@@ -118,6 +110,7 @@ export class UserService {
                 Gender: "",
                 Description: ""
             },
+            Connected: true,
             Likes: [],
             Meets: [],
             _id: null,
