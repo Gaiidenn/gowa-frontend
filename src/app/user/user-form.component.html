@@ -4,11 +4,11 @@
         <span>
             <small>
                 {{registrationProgress()}} % completed
-                <md-progress-bar mode="determinate<" [value]="registrationProgress()"></md-progress-bar>
             </small>
         </span>
     </md-card-title>
-    <md-card-content>
+    <md-progress-bar mode="determinate<" [value]="registrationProgress()"></md-progress-bar>
+    <md-card-content style="padding-top: 10px;">
         <form #f="ngForm">
             <div [ngSwitch]="registrationStep">
                 <div *ngSwitchCase="0">
