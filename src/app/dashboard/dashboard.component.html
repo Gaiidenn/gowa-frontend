@@ -11,7 +11,7 @@
                 No users to display
             </md-card>
             <md-card *ngFor="let user of _usersService.list">
-                <md-card-title>{{user.Username}}</md-card-title>
+                <md-card-title>{{user.Username}} <small *ngIf="user.Connected">online</small><small *ngIf="!user.Connected">offline</small></md-card-title>
                 <md-card-content>
                     <md-list>
                         <md-list-item>{{user.Email}}</md-list-item>

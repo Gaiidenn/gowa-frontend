@@ -16,11 +16,14 @@ export class UsersService  {
             .catch(error => console.log(error));
     }
 
-    updateList(user: User) {
+    updateList(user: User): boolean {
         console.log(user);
         let inList = false;
         for (let i in this.list) {
-            if (user.Token == this.list[i].Token) {
+            if (
+                (user.Token && user.Token == this.list[i].Token)
+                || user.Username == this.list[i].Username
+                ) {
                 this.list[i] = user;
                 inList = true;
             }
@@ -28,14 +31,15 @@ export class UsersService  {
         if (inList == false) {
             this.list.push(user);
         }
-        return "ok";
+        return true;
     }
 
-    removeFromList(token: string) {
+    removeFromList(token: string): boolean {
         for (let i in this.list) {
             if (this.list[i].Token == token) {
                 delete this.list[i]
             }
         }
+        return true
     }
 }

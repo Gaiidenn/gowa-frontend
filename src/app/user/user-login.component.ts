@@ -32,6 +32,7 @@ export class UserLoginComponent implements OnInit {
         private _userService: UserService
     ) {
         this.userLogin = {
+            Token: this._userService.user.Token,
             Username: "",
             Password: ""
         };

@@ -29,6 +29,7 @@ export class UserService {
         let password = this._cookieService.get("password");
         if (username && password) {
             let userLogin: UserLogin = {
+                Token: this.user.Token,
                 Username: username,
                 Password: password
             };
@@ -51,6 +52,7 @@ export class UserService {
     }
 
     login(userLogin: UserLogin) {
+        userLogin.Token = this.user.Token;
         this._rpc.PromiseCall("UserRPCService.Login", userLogin).then(result => {
             console.log(JSON.stringify(result));
             this.user = result;
@@ -63,10 +65,16 @@ export class UserService {
     }
 
     logout(): void {
-        this.user = this.newUser();
-        this._cookieService.put("username", null);
-        this._cookieService.put("password", null);
-        this.registrationStatus = STATUS_ANONYMOUS;
+        this.user.Connected = false;
+        this._rpc.PromiseCall("UserRPCService.Logout", this.user).then(() => {
+            this.resetUser();
+            this._cookieService.put("username", null);
+            this._cookieService.put("password", null);
+            this.registrationStatus = STATUS_ANONYMOUS;
+        }).catch(error => {
+            console.log(error)
+        })
+
     }
 
     isUserRegistered(): boolean {
@@ -118,9 +126,27 @@ export class UserService {
             _key: null
         };
     }
+
+    resetUser() {
+        this.user.Username = "";
+        this.user.Password = "";
+        this.user.Email = "";
+        this.user.Profile = {
+            Age: 18,
+            Gender: "",
+            Description: ""
+        },
+        this.user.Connected = true;
+        this.user.Likes = [];
+        this.user.Meets = [];
+        this.user._id = null;
+        this.user._rev = null;
+        this.user._key = null;
+    }
 }
 
 export interface UserLogin {
+    Token: string;
     Username: string;
     Password: string;
 }
