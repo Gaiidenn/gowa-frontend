@@ -20,10 +20,7 @@ export class UsersService  {
         console.log(user);
         let inList = false;
         for (let i in this.list) {
-            if (
-                (user.Token && user.Token == this.list[i].Token)
-                || user.Username == this.list[i].Username
-                ) {
+            if (user.Token && user.Token == this.list[i].Token) {
                 this.list[i] = user;
                 inList = true;
             }

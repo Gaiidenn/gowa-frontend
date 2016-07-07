@@ -9,7 +9,6 @@ md-card {
     justify-content: flex-start;
 }
 .md-card-container md-card {
-    min-width: 250px;
-    max-width: 300px;
+    width: 250px;
     transition: position 0.5s ease-in-out;
 }

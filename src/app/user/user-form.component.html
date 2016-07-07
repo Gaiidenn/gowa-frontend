@@ -8,6 +8,7 @@
         </span>
     </md-card-title>
     <md-progress-bar mode="determinate<" [value]="registrationProgress()"></md-progress-bar>
+    <p>{{diagnostic()}}</p>
     <md-card-content style="padding-top: 10px;">
         <form #f="ngForm">
             <div [ngSwitch]="registrationStep">
@@ -21,8 +22,7 @@
                                 placeholder="Nickname"
                                 (keyup.enter)="goToNextStep()"
                                 #username="ngForm"
-                                style="width: 180px;"
-                                [dividerColor]="getDividerColor(username)">
+                                style="width: 180px;">
                         <md-hint align="end">{{username.value.length}} / 4 characters minimum</md-hint>
                     </md-input>
                     <button md-raised-button type="button" (click)="goToNextStep()" [disabled]="!username.valid">Connect !</button>
@@ -46,8 +46,7 @@
                                 placeholder="Age"
                                 (keyup.enter)="gender.focus()"
                                 #age="ngForm"
-                                style="width: 50px;"
-                                [dividerColor]="getDividerColor(age)">
+                                style="width: 50px;">
                     </md-input>
                     years old. "
                     <br>
@@ -57,8 +56,7 @@
                                 placeholder="Description"
                                 (keyup.enter)="goToNextStep()"
                                 #description="ngForm"
-                                style="width: 450px;"
-                                [dividerColor]="getDividerColor(description)">
+                                style="width: 450px;">
                     </md-input> ! "
                     <button md-raised-button type="button" (click)="goToNextStep()" [disabled]="!age.valid || !gender.valid">Tell people who I am !</button>
                 </div>
@@ -72,8 +70,7 @@
                                 placeholder="Email"
                                 (keyup.enter)="password.focus()"
                                 #email="ngForm"
-                                style="width: 180px;margin-right: 5px;"
-                                [dividerColor]="getDividerColor(email)">
+                                style="width: 180px;margin-right: 5px;">
                     </md-input>
                     <md-input   required
                                 minlength="4"
@@ -82,8 +79,7 @@
                                 placeholder="Password"
                                 (keyup.enter)="goToNextStep()"
                                 #password="ngForm"
-                                style="width: 180px;"
-                                [dividerColor]="getDividerColor(password)">
+                                style="width: 180px;">
                     </md-input>
                     <button md-raised-button type="button" (click)="goToNextStep()" [disabled]="!email.valid || !password.valid">Register !</button>
                 </div>

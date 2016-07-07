@@ -14,10 +14,11 @@
                 <md-card-title>{{user.Username}} <small *ngIf="user.Connected">online</small><small *ngIf="!user.Connected">offline</small></md-card-title>
                 <md-card-content>
                     <md-list>
-                        <md-list-item>{{user.Email}}</md-list-item>
-                        <md-list-item>{{user.Profile.Age}}</md-list-item>
-                        <md-list-item>{{user.Profile.Gender}}</md-list-item>
-                        <md-list-item>{{user.Profile.Description}}</md-list-item>
+                        <md-list-item>Token : {{user.Token}}</md-list-item>
+                        <md-list-item>Email : {{user.Email}}</md-list-item>
+                        <md-list-item>Age : {{user.Profile.Age}}</md-list-item>
+                        <md-list-item>Gender : {{user.Profile.Gender}}</md-list-item>
+                        <md-list-item>Description : {{user.Profile.Description}}</md-list-item>
                     </md-list>
                 </md-card-content>
                 <md-card-actions>

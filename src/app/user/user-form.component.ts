@@ -57,9 +57,9 @@ export class UserFormComponent{
         });
     }
 
-    getDividerColor(field: FormControl): string {
+    /*getDividerColor(field: FormControl): string {
         return field.valid || field.pristine ? "primary" : "accent";
-    }
+    }*/
 
     registrationProgress(): number {
         let total = 5;
