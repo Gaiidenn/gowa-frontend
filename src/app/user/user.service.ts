@@ -1,7 +1,7 @@
-import {Injectable, Input} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {CookieService} from 'angular2-cookie/core';
 import {jsonrpcService} from '../jsonrpc/jsonrpc.service';
-import {User} from './user';
+import {User, UserLogin} from './user';
 
 export const STATUS_ANONYMOUS = 0;
 export const STATUS_NAMED = 1;
@@ -18,7 +18,7 @@ export class UserService {
         private _rpc: jsonrpcService
     ) {
         if (!this.user){
-            this.user = this.newUser();
+            this.user = UserService.newUser();
         }
         this.checkStatus()
     }
@@ -107,7 +107,7 @@ export class UserService {
         return this.registrationStatus;
     }
 
-    newUser(): User {
+    protected static newUser(): User {
         return {
             Token: "",
             Username: "",
@@ -135,7 +135,7 @@ export class UserService {
             Age: 18,
             Gender: "",
             Description: ""
-        },
+        };
         this.user.Connected = true;
         this.user.Likes = [];
         this.user.Meets = [];
@@ -143,10 +143,4 @@ export class UserService {
         this.user._rev = null;
         this.user._key = null;
     }
-}
-
-export interface UserLogin {
-    Token: string;
-    Username: string;
-    Password: string;
 }

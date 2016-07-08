@@ -17,3 +17,14 @@ export interface UserProfile {
     Gender: string;
     Description: string;
 }
+
+export interface UserLogin {
+    Token: string;
+    Username: string;
+    Password: string;
+}
+
+export interface Gender {
+    key: string;
+    value: string;
+}

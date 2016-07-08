@@ -9,7 +9,8 @@ import {MdButton} from '@angular2-material/button';
 import {MdIcon} from '@angular2-material/icon';
 import {CookieService} from 'angular2-cookie/core';
 import {jsonrpcService} from '../jsonrpc/jsonrpc.service';
-import {User} from './user';
+import {Gender, User} from './user';
+import {GENDERS} from './mock-genders';
 import {UserService, STATUS_ANONYMOUS, STATUS_REGISTERED} from './user.service';
 import {FormGroup, FormControl} from "@angular/forms";
 
@@ -33,7 +34,7 @@ import {FormGroup, FormControl} from "@angular/forms";
 })
 export class UserFormComponent{
 
-    genders = [{key:'M', value:'Man'},{key:'F', value:'Lady'}];
+    genders: Array<Gender> = GENDERS;
 
     registrationStep = 0;
 

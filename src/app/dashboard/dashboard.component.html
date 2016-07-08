@@ -13,13 +13,11 @@
             <md-card *ngFor="let user of _usersService.list">
                 <md-card-title>{{user.Username}} <small *ngIf="user.Connected">online</small><small *ngIf="!user.Connected">offline</small></md-card-title>
                 <md-card-content>
-                    <md-list>
-                        <md-list-item>Token : {{user.Token}}</md-list-item>
-                        <md-list-item>Email : {{user.Email}}</md-list-item>
-                        <md-list-item>Age : {{user.Profile.Age}}</md-list-item>
-                        <md-list-item>Gender : {{user.Profile.Gender}}</md-list-item>
-                        <md-list-item>Description : {{user.Profile.Description}}</md-list-item>
-                    </md-list>
+                    <p>" I am a <b>{{getGenderValue(user.Profile.Gender)}}</b> of <b>{{ user.Profile.Age }}</b> years old. "</p>
+                    <br>
+                    <p *ngIf="user.Profile.Description.length > 0">
+                        " To shortly describe myself, I could say that I am <b>{{ user.Profile.Description }}</b> ! "
+                    </p>
                 </md-card-content>
                 <md-card-actions>
                     <button md-button>Do Something</button>

@@ -7,8 +7,8 @@ import {MD_LIST_DIRECTIVES} from '@angular2-material/list';
 import {MdToolbar} from '@angular2-material/toolbar';
 import {MdButton} from '@angular2-material/button';
 import {jsonrpcService} from '../jsonrpc/jsonrpc.service';
-
-import {UserService, UserLogin} from './user.service';
+import {UserLogin} from './user';
+import {UserService} from './user.service';
 
 @Component({
     selector: 'user-login',

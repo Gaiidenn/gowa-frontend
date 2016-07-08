@@ -5,7 +5,7 @@ import {MD_GRID_LIST_DIRECTIVES} from '@angular2-material/grid-list';
 import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
 import {MD_LIST_DIRECTIVES} from '@angular2-material/list';
 import {UsersService} from '../users/users.service';
-import {User} from '../user/user';
+import {GENDERS} from '../user/mock-genders';
 
 @Component({
     selector: 'my-dashboard',
@@ -29,5 +29,15 @@ export class DashboardComponent {
         private _usersService: UsersService
     ) {
 
+    }
+
+    getGenderValue(g: string): string {
+        let v: string = "";
+        for (let i in GENDERS) {
+            if (GENDERS[i].key == g) {
+                v = GENDERS[i].value;
+            }
+        }
+        return v;
     }
 }
