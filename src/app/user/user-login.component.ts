@@ -11,7 +11,7 @@ import {UserLogin} from './user';
 import {UserService} from './user.service';
 
 @Component({
-    selector: 'User-login',
+    selector: 'user-login',
     templateUrl: 'app/user/user-login.component.html',
     styleUrls: ['app/user/user-login.component.css'],
     directives: [

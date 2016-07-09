@@ -44,7 +44,7 @@
                 </p>
                 </div>
                 <form #f="ngForm">
-                    <p>
+                    <div class="chat-input">
                         <md-input   minlength="1"
                                     maxlength="200"
                                     type="text"
@@ -54,10 +54,14 @@
                                     name="msg"
                                     ngControl="msg"
                                     (keyup.enter)="_chatService.sendMessage(chat.message)"
-                                    style="width: 100%;">
+                                    style="width: 80%">
                             <md-hint align="end">{{chat.message.Msg.length}} / 200 characters max</md-hint>
                         </md-input>
-                    </p>
+                        <button md-button
+                                [disabled]="chat.message.Msg.length == 0"
+                                (click)="_chatService.sendMessage(chat.message)"
+                                style="width: 18%">Send</button>
+                    </div>
                 </form>
             </template>
         </md-tab>
