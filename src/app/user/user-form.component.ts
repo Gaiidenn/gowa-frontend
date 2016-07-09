@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {NgForm, FormBuilder, Validators} from '@angular/common';
+import {NgForm} from '@angular/forms';
 import {MD_LIST_DIRECTIVES} from '@angular2-material/list';
 import {MD_PROGRESS_BAR_DIRECTIVES} from '@angular2-material/progress-bar';
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';

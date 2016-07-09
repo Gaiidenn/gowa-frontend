@@ -11,8 +11,8 @@ if (environment.production) {
 
 bootstrap(AppComponent, [
     APP_ROUTER_PROVIDERS,
-    HTTP_PROVIDERS/*,
+    HTTP_PROVIDERS,
     disableDeprecatedForms(),
-    provideForms()*/ // TODO : Reactivate new Form providers when angular 2 material will be OP
+    provideForms()
 ]);
 

@@ -1,11 +1,16 @@
-import {Component, OnInit, Input} from '@angular/core';
-import {TemplatePortalDirective} from '@angular2-material/core';
+import {Component} from '@angular/core';
+import {NgForm} from '@angular/forms';
+import {MdUniqueSelectionDispatcher} from '@angular2-material/core';
 import {MdToolbar} from '@angular2-material/toolbar';
 import {MD_GRID_LIST_DIRECTIVES} from '@angular2-material/grid-list';
 import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
 import {MD_LIST_DIRECTIVES} from '@angular2-material/list';
+import {MD_TABS_DIRECTIVES} from '@angular2-material/tabs';
+import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
+import {UserService} from '../user/user.service';
 import {UsersService} from '../users/users.service';
 import {GENDERS} from '../user/mock-genders';
+import {ChatService} from '../chat/chat.service';
 
 @Component({
     selector: 'my-dashboard',
@@ -16,17 +21,22 @@ import {GENDERS} from '../user/mock-genders';
         MD_GRID_LIST_DIRECTIVES,
         MD_CARD_DIRECTIVES,
         MD_LIST_DIRECTIVES,
-        TemplatePortalDirective
+        MD_TABS_DIRECTIVES,
+        MD_INPUT_DIRECTIVES
     ],
     providers: [
-        UsersService
+        UsersService,
+        ChatService,
+        MdUniqueSelectionDispatcher
     ]
 })
 export class DashboardComponent {
     usersLoading: boolean = true;
 
     constructor(
-        private _usersService: UsersService
+        private _userService: UserService,
+        private _usersService: UsersService,
+        private _chatService: ChatService
     ) {
 
     }

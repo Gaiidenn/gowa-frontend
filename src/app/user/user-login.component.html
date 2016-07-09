@@ -1,12 +1,26 @@
 <md-card>
     <md-card-content>
-        <form>
+        <form #f="ngForm">
             <table style="width: 100%;"><tr>
                 <td>
-                    <md-input type="text" placeholder="Username or email" [(ngModel)]="userLogin.Username" ngControl="Username" (keyup.enter)="valid()?submit():return"></md-input>
+                    <md-input type="text"
+                              placeholder="Username or email"
+                              [(ngModel)]="userLogin.Username"
+                              #username
+                              name="username"
+                              (keyup.enter)="valid()?submit():return">
+
+                    </md-input>
                 </td>
                 <td>
-                    <md-input type="password" placeholder="Password" [(ngModel)]="userLogin.Password" ngControl="Password" (keyup.enter)="valid()?submit():return"></md-input>
+                    <md-input type="password"
+                              placeholder="Password"
+                              [(ngModel)]="userLogin.Password"
+                              #password
+                              name="password"
+                              (keyup.enter)="valid()?submit():return">
+
+                    </md-input>
                 </td>
                 <td>
                     <button md-raised-button type="button" (click)="submit()" [disabled]="!valid()">Login</button>

@@ -114,7 +114,7 @@ export class UserService {
             Password: "",
             Email: "",
             Profile: {
-                Age: 18,
+                Age: null,
                 Gender: "",
                 Description: ""
             },

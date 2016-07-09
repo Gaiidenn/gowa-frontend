@@ -1,29 +1,65 @@
 <md-card>
-    <md-card-title>
-        <span>All Users : </span>
-    </md-card-title>
-    <md-card-content>
-        <div class="md-card-container">
-            <md-card *ngIf="!_usersService.list">
-                Users list is loading...
-            </md-card>
-            <md-card *ngIf="_usersService.list && _usersService.list.length == 0">
-                No users to display
-            </md-card>
-            <md-card *ngFor="let user of _usersService.list">
-                <md-card-title>{{user.Username}} <small *ngIf="user.Connected">online</small><small *ngIf="!user.Connected">offline</small></md-card-title>
+    <md-tab-group>
+        <md-tab>
+            <template md-tab-label>
+                <span>All Users</span>
+            </template>
+            <template md-tab-content>
                 <md-card-content>
-                    <p>" I am a <b>{{getGenderValue(user.Profile.Gender)}}</b> of <b>{{ user.Profile.Age }}</b> years old. "</p>
-                    <br>
-                    <p *ngIf="user.Profile.Description.length > 0">
-                        " To shortly describe myself, I could say that I am <b>{{ user.Profile.Description }}</b> ! "
-                    </p>
+                    <div class="md-card-container">
+                        <md-card *ngIf="!_usersService.list">
+                            Users list is loading...
+                        </md-card>
+                        <md-card *ngIf="_usersService.list && _usersService.list.length == 0">
+                            No users to display
+                        </md-card>
+                        <md-card *ngFor="let user of _usersService.list">
+                            <md-card-title>{{user.Username}} <small *ngIf="user.Connected">online</small><small *ngIf="!user.Connected">offline</small></md-card-title>
+                            <md-card-content>
+                                <p>" I am a <b>{{getGenderValue(user.Profile.Gender)}}</b> of <b>{{ user.Profile.Age }}</b> years old. "</p>
+                                <br>
+                                <p *ngIf="user.Profile.Description.length > 0">
+                                    " To shortly describe myself, I could say that I am <b>{{ user.Profile.Description }}</b> ! "
+                                </p>
+                            </md-card-content>
+                            <md-card-actions>
+                                <button md-button [disabled]="!user.Connected" (click)="_chatService.openChat(user)">Chat</button>
+                            </md-card-actions>
+                        </md-card>
+                        <div style="clear: both;"></div>
+                    </div>
                 </md-card-content>
-                <md-card-actions>
-                    <button md-button>Do Something</button>
-                </md-card-actions>
-            </md-card>
-            <div style="clear: both;"></div>
-        </div>
-    </md-card-content>
+            </template>
+        </md-tab>
+        <md-tab *ngFor="let chat of _chatService.chats">
+            <template md-tab-label>
+                <span *ngFor="let user of chat.chat.Users">
+                    <span *ngIf="user.Token != _userService.user.Token">{{ user.Username }}</span>
+                </span>
+            </template>
+            <template md-tab-content>
+                <div style="height: 300px">
+                <p *ngFor="let message of chat.chat.Conversation">
+                    <b>{{ message.User.Username }}</b> : {{ message.Msg }}
+                </p>
+                </div>
+                <form #f="ngForm">
+                    <p>
+                        <md-input   minlength="1"
+                                    maxlength="200"
+                                    type="text"
+                                    placeholder="Write a message..."
+                                    [(ngModel)]="chat.message.Msg"
+                                    #msg="ngModel"
+                                    name="msg"
+                                    ngControl="msg"
+                                    (keyup.enter)="_chatService.sendMessage(chat.message)"
+                                    style="width: 100%;">
+                            <md-hint align="end">{{chat.message.Msg.length}} / 200 characters max</md-hint>
+                        </md-input>
+                    </p>
+                </form>
+            </template>
+        </md-tab>
+    </md-tab-group>
 </md-card>

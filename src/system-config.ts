@@ -82,5 +82,5 @@ System.config({
   packages: cliSystemConfigPackages
 });
 
-// Apply the user's configuration.
+// Apply the User's configuration.
 System.config({ map, packages });

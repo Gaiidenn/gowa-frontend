@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {NgForm} from '@angular/common';
+import {NgForm} from '@angular/forms';
 import {CookieService} from 'angular2-cookie/core';
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
 import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
@@ -11,7 +11,7 @@ import {UserLogin} from './user';
 import {UserService} from './user.service';
 
 @Component({
-    selector: 'user-login',
+    selector: 'User-login',
     templateUrl: 'app/user/user-login.component.html',
     styleUrls: ['app/user/user-login.component.css'],
     directives: [
