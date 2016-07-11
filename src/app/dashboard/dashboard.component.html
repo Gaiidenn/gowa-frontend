@@ -34,14 +34,14 @@
         <md-tab *ngFor="let chat of _chatService.chats">
             <template md-tab-label>
                 <span *ngFor="let user of chat.chat.Users">
-                    <span *ngIf="user.Token != _userService.user.Token">{{ user.Username }}</span>
+                    <span *ngIf="user.Username != _userService.user.Username">{{ user.Username }}</span>
                 </span>
             </template>
             <template md-tab-content>
-                <div style="height: 300px">
-                <p *ngFor="let message of chat.chat.Conversation">
-                    <b>{{ message.User.Username }}</b> : {{ message.Msg }}
-                </p>
+                <div class="chat-conv-container">
+                    <div class="chat-conv-msg" *ngFor="let message of chat.chat.Conversation">
+                        <b>{{ message.User.Username }}</b> : {{ message.Msg }}
+                    </div>
                 </div>
                 <form #f="ngForm">
                     <div class="chat-input">

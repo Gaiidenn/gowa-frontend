@@ -46,9 +46,6 @@ export class UserFormComponent{
         
     }
 
-    diagnostic() {
-        return JSON.stringify(this._userService.user);
-    }
     goToNextStep() {
         let self = this;
         this._userService.save().then(() => {

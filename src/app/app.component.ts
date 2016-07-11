@@ -51,6 +51,10 @@ export class AppComponent {
         }
         this._rpc.Register("App.setToken", this.setToken.bind(this));
     }
+    
+    diagnostic() {
+        return JSON.stringify(this._userService.user);
+    }
 
     setToken(token: string): boolean {
         this._rpc.newClient("ws://" + WS_BASE_URL + "/jsonrpc", token);

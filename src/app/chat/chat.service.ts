@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {CookieService} from 'angular2-cookie/core';
 import {jsonrpcService} from '../jsonrpc/jsonrpc.service';
 import {Chat, Message} from './chat';
-import {User} from '../user/user';
+import {User, Meet} from '../user/user';
 import {UserService} from '../user/user.service';
 
 @Injectable()
@@ -26,7 +26,7 @@ export class ChatService {
         if (user._key != null) {
             for (let i in this._userService.user.Meets) {
                 if (user._key == this._userService.user.Meets[i].UserID) {
-                    chatID = this._userService.user.Meets[i].UserID;
+                    chatID = this._userService.user.Meets[i].ChatID;
                 }
             }
         }
@@ -35,7 +35,7 @@ export class ChatService {
         } else {
             this._rpc.PromiseCall("ChatRPCService.NewChat", [this._userService.user, user])
                 .then(chat => {
-                    this.registerChat(chat)
+                    this.registerChat(chat);
                 })
                 .catch(err => {
                     console.log(err)
@@ -71,11 +71,10 @@ export class ChatService {
         for (let i in this.chats) {
             if (this.chats[i].chat._key == message.ChatKey) {
                 this.chats[i].chat.Conversation.push(message);
-                continue;
             }
         }
         if (!registered) {
-            
+            this.openChat(message.ChatKey);
         }
         return true
     }
@@ -100,7 +99,40 @@ export class ChatService {
         if (!exists) {
             this.chats.push({chat: chat, message: message});
         }
+        this.checkMeets(chat);
         return true
     }
 
+    private checkMeets(chat: Chat) {
+        //  Protection to prevent including chat rooms (more than 2 users) into user's meets array
+        if (chat.Users.length > 2) {
+            return;
+        }
+        //  Protection to prevent stats on non-registered users
+        if (this._userService.user._key == null) {
+            return;
+        }
+        var user: User;
+        for (let i in chat.Users) {
+            if (chat.Users[i]._key != this._userService.user._key) {
+                user = chat.Users[i];
+            }
+        }
+        let exists = false;
+        for (let i in this._userService.user.Meets) {
+            if (user._key == this._userService.user.Meets[i].UserID) {
+                exists = true
+            }
+        }
+        if (!exists) {
+            let meet: Meet = {
+                UserID: user._key,
+                ChatID: chat._key
+            };
+            console.log("pushing meet into meets array");
+            this._userService.user.Meets.push(meet);
+            console.log("trying to save user");
+            this._userService.save();
+        }
+    }
 }
