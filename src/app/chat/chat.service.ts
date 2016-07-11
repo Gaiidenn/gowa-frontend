@@ -18,9 +18,10 @@ export class ChatService {
         private _userService: UserService
     ) {
         this._rpc.Register("ChatService.msgReceived", this.msgReceived.bind(this));
+        this._rpc.Register("ChatService.registerChat", this.registerChat.bind(this));
     }
 
-    openChat(user: User) {
+    openChatWithUser(user: User) {
         let chatID: string;
         if (user._key != null) {
             for (let i in this._userService.user.Meets) {
@@ -30,17 +31,23 @@ export class ChatService {
             }
         }
         if (chatID != null) {
-            this._rpc.PromiseCall("ChatRPCService.OpenChat", chatID)
-                .then(chat => {
-                    this.registerChat(chat);
-                })
-                .catch(err => {
-                    console.log(err)
-                });
+            this.openChat(chatID);
         } else {
             this._rpc.PromiseCall("ChatRPCService.NewChat", [this._userService.user, user])
                 .then(chat => {
                     this.registerChat(chat)
+                })
+                .catch(err => {
+                    console.log(err)
+                });
+        }
+    }
+
+    openChat(chatID: string) {
+        if (chatID != null) {
+            this._rpc.PromiseCall("ChatRPCService.OpenChat", chatID)
+                .then(chat => {
+                    this.registerChat(chat);
                 })
                 .catch(err => {
                     console.log(err)
@@ -60,11 +67,15 @@ export class ChatService {
     }
 
     msgReceived(message: Message): boolean {
+        let registered = false;
         for (let i in this.chats) {
             if (this.chats[i].chat._key == message.ChatKey) {
                 this.chats[i].chat.Conversation.push(message);
                 continue;
             }
+        }
+        if (!registered) {
+            
         }
         return true
     }
@@ -89,6 +100,7 @@ export class ChatService {
         if (!exists) {
             this.chats.push({chat: chat, message: message});
         }
+        return true
     }
 
 }

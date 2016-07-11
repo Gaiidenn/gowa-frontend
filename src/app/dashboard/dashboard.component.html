@@ -23,7 +23,7 @@
                                 </p>
                             </md-card-content>
                             <md-card-actions>
-                                <button md-button [disabled]="!user.Connected" (click)="_chatService.openChat(user)">Chat</button>
+                                <button md-button [disabled]="!user.Connected" (click)="_chatService.openChatWithUser(user)">Chat</button>
                             </md-card-actions>
                         </md-card>
                         <div style="clear: both;"></div>
