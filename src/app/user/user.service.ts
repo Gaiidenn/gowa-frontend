@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {CookieService} from 'angular2-cookie/core';
 import {jsonrpcService} from '../jsonrpc/jsonrpc.service';
 import {User, UserLogin} from './user';
+import {Subject} from "rxjs/Rx";
 
 export const STATUS_ANONYMOUS = 0;
 export const STATUS_NAMED = 1;
@@ -12,6 +13,8 @@ export const STATUS_REGISTERED = 3;
 export class UserService {
     public user: User;
     public registrationStatus: number = STATUS_ANONYMOUS;
+
+    public userChange: Subject<User> = new Subject<User>();
 
     constructor(
         private _cookieService: CookieService,
@@ -37,10 +40,11 @@ export class UserService {
         }
     }
 
-    save(): any {
+    save(user: User = this.user): any {
         return new Promise((resolve, reject) => {
-            this._rpc.PromiseCall("UserRPCService.Save", this.user).then(user => {
+            this._rpc.PromiseCall("UserRPCService.Save", user).then(user => {
                 this.user = user;
+                this.userChange.next(this.user);
                 if (this.user.username) this._cookieService.put("username", this.user.username);
                 if (this.user.password) this._cookieService.put("password", this.user.password);
                 this.checkStatus();
@@ -56,6 +60,7 @@ export class UserService {
         this._rpc.PromiseCall("UserRPCService.Login", userLogin).then(result => {
             console.log(JSON.stringify(result));
             this.user = result;
+            this.userChange.next(this.user);
             this._cookieService.put("username", this.user.username);
             this._cookieService.put("password", this.user.password);
             this.registrationStatus = STATUS_REGISTERED;
@@ -82,10 +87,6 @@ export class UserService {
             return false;
         }
         return !!this.user.id;
-    }
-
-    setUsername(username: string) {
-        this.user.username = username;
     }
 
     checkStatus(): number {
@@ -124,7 +125,7 @@ export class UserService {
     }
 
     resetUser() {
-        this.user.id = "";
+        this.user.id = null;
         this.user.username = "";
         this.user.password = "";
         this.user.email = "";
@@ -132,5 +133,6 @@ export class UserService {
         this.user.description = "";
         this.user.gender = "";
         this.user.connected = true;
+        this.userChange.next(this.user);
     }
 }

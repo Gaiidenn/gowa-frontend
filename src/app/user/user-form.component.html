@@ -17,16 +17,19 @@
                     <md-input   required
                                 minlength="4"
                                 type="text"
-                                [(ngModel)]="_userService.user.username"
+                                [(ngModel)]="tmpUser.username"
                                 placeholder="Nickname"
                                 (keyup.enter)="goToNextStep()"
                                 #username="ngModel"
                                 name="username"
                                 ngControl="username"
                                 style="width: 180px;">
-                        <md-hint align="end">{{_userService.user.username.length}} / 4 characters minimum</md-hint>
+                        <md-hint align="end">{{tmpUser.username.length}} / 4 characters minimum</md-hint>
                     </md-input>
-                    <button md-raised-button type="button" (click)="goToNextStep()" [disabled]="!username.valid || username.pristine">Connect !</button>
+                    <button md-raised-button type="button" (click)="goToNextStep()" [disabled]="!username.valid || username.pristine">
+                        <span *ngIf="!_userService.user.username">Connect !</span>
+                        <span *ngIf="_userService.user.username && _userService.user.username.length > 0">Update !</span>
+                    </button>
                 </div>
                 <div *ngSwitchCase="1">
                     Good to see you <b>{{_userService.user.Username}}</b> !! You are now able to chat with other people !
@@ -34,7 +37,7 @@
                     " I am a
                     <md-radio-group required
                                     placeholder="Gender"
-                                    [(ngModel)]="_userService.user.gender"
+                                    [(ngModel)]="tmpUser.gender"
                                     (keyup.enter)="description.focus()"
                                     style="width: 100px;"
                                     #gender="ngModel"
@@ -45,7 +48,7 @@
                     of
                     <md-input   required
                                 type="number"
-                                [(ngModel)]="_userService.user.age"
+                                [(ngModel)]="tmpUser.age"
                                 placeholder="Age"
                                 (keyup.enter)="gender.focus()"
                                 #age="ngModel"
@@ -57,7 +60,7 @@
                     <br>
                     " To shortly describe myself, I could say that I am
                     <md-input   type="text"
-                                [(ngModel)]="_userService.user.description"
+                                [(ngModel)]="tmpUser.description"
                                 placeholder="Description"
                                 (keyup.enter)="goToNextStep()"
                                 #description="ngModel"
@@ -72,7 +75,7 @@
                     <br>
                     <md-input   required
                                 type="email"
-                                [(ngModel)]="_userService.user.email"
+                                [(ngModel)]="tmpUser.email"
                                 placeholder="Email"
                                 (keyup.enter)="password.focus()"
                                 #email="ngModel"
@@ -83,7 +86,7 @@
                     <md-input   required
                                 minlength="4"
                                 type="password"
-                                [(ngModel)]="_userService.user.password"
+                                [(ngModel)]="tmpUser.password"
                                 placeholder="Password"
                                 (keyup.enter)="goToNextStep()"
                                 #password="ngModel"

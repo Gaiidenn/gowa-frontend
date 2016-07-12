@@ -22,27 +22,13 @@ export class ChatService {
     }
 
     openChatWithUser(user: User) {
-        let chatID: string;
-        if (user.id != null) {
-            /*
-            for (let i in this._userService.user.Meets) {
-                if (user._key == this._userService.user.Meets[i].userID) {
-                    chatID = this._userService.user.Meets[i].chatID;
-                }
-            }
-            */
-        }
-        if (chatID != null) {
-            this.openChat(chatID);
-        } else {
-            this._rpc.PromiseCall("ChatRPCService.NewChat", [this._userService.user, user])
-                .then(chat => {
-                    this.registerChat(chat);
-                })
-                .catch(err => {
-                    console.log(err)
-                });
-        }
+        this._rpc.PromiseCall("ChatRPCService.OpenChat", [this._userService.user, user])
+            .then(chat => {
+                this.registerChat(chat);
+            })
+            .catch(err => {
+                console.log(err)
+            });
     }
 
     openChat(chatID: string) {
@@ -59,7 +45,7 @@ export class ChatService {
 
     sendMessage(message: Message) {
         if (message.msg.length > 0) {
-            message.User = this._userService.user;
+            message.user = this._userService.user;
             this._rpc.PromiseCall("ChatRPCService.NewMessage", message).then(() => {
                 message.msg = "";
             }).catch(err => {
@@ -71,12 +57,12 @@ export class ChatService {
     msgReceived(message: Message): boolean {
         let registered = false;
         for (let i in this.chats) {
-            if (this.chats[i].chat.id == message.chatKey) {
+            if (this.chats[i].chat.id == message.chatID) {
                 this.chats[i].chat.conversation.push(message);
             }
         }
         if (!registered) {
-            this.openChat(message.chatKey);
+            this.openChat(message.chatID);
         }
         return true
     }
@@ -84,9 +70,10 @@ export class ChatService {
     private registerChat(chat: Chat) {
         let exists = false;
         let message: Message = {
-            chatKey: chat.id,
-            User: this._userService.user,
-            msg: ""
+            chatID: chat.id,
+            user: this._userService.user,
+            msg: "",
+            createdAt: ""
         };
 
         for (let i in this.chats) {

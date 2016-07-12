@@ -5,7 +5,7 @@
                 <td>
                     <md-input type="text"
                               placeholder="Username or email"
-                              [(ngModel)]="userLogin.Username"
+                              [(ngModel)]="userLogin.username"
                               #username="ngModel"
                               name="username"
                               (keyup.enter)="valid()?submit():return">
@@ -15,7 +15,7 @@
                 <td>
                     <md-input type="password"
                               placeholder="Password"
-                              [(ngModel)]="userLogin.Password"
+                              [(ngModel)]="userLogin.password"
                               #password="ngModel"
                               name="password"
                               (keyup.enter)="valid()?submit():return">

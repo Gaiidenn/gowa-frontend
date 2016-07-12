@@ -35,6 +35,9 @@ import {FormGroup, FormControl} from "@angular/forms";
 export class UserFormComponent{
 
     genders: Array<Gender> = GENDERS;
+    tmpUser: User;
+
+    subscription: any;
 
     registrationStep = 0;
 
@@ -43,12 +46,15 @@ export class UserFormComponent{
         private _cookieService: CookieService,
         private _userService: UserService
     ) {
-        
+        this.tmpUser = this._userService.user;
+        this.subscription = this._userService.userChange.subscribe((user) => {
+            this.tmpUser = user;
+        });
     }
 
     goToNextStep() {
         let self = this;
-        this._userService.save().then(() => {
+        this._userService.save(this.tmpUser).then(() => {
             self.registrationStep = self._userService.registrationStatus;
         }).catch( error => {
             console.log(error);
@@ -79,4 +85,5 @@ export class UserFormComponent{
     registrationStepForward() {
         this.registrationStep++;
     }
+
 }
