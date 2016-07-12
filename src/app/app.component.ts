@@ -44,8 +44,8 @@ export class AppComponent {
     constructor(private _cookieService:CookieService,
                 private _rpc:jsonrpcService,
                 private _userService:UserService) {
-        if (this._userService.user.Token && this._userService.user.Token != "") {
-            this._rpc.newServer("ws://" + WS_BASE_URL + "/push", this._userService.user.Token);
+        if (this._userService.user.token && this._userService.user.token != "") {
+            this._rpc.newServer("ws://" + WS_BASE_URL + "/push", this._userService.user.token);
         } else {
             this._rpc.newServer("ws://" + WS_BASE_URL + "/push");
         }

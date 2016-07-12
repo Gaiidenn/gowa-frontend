@@ -14,16 +14,16 @@
                             No users to display
                         </md-card>
                         <md-card *ngFor="let user of _usersService.list">
-                            <md-card-title>{{user.Username}} <small *ngIf="user.Connected">online</small><small *ngIf="!user.Connected">offline</small></md-card-title>
+                            <md-card-title>{{user.username}} <small *ngIf="user.connected">online</small><small *ngIf="!user.connected">offline</small></md-card-title>
                             <md-card-content>
-                                <p>" I am a <b>{{getGenderValue(user.Profile.Gender)}}</b> of <b>{{ user.Profile.Age }}</b> years old. "</p>
+                                <p>" I am a <b>{{getGenderValue(user.gender)}}</b> of <b>{{ user.age }}</b> years old. "</p>
                                 <br>
-                                <p *ngIf="user.Profile.Description.length > 0">
-                                    " To shortly describe myself, I could say that I am <b>{{ user.Profile.Description }}</b> ! "
+                                <p *ngIf="user.description && user.description.length > 0">
+                                    " To shortly describe myself, I could say that I am <b>{{ user.description }}</b> ! "
                                 </p>
                             </md-card-content>
                             <md-card-actions>
-                                <button md-button [disabled]="!user.Connected" (click)="_chatService.openChatWithUser(user)">Chat</button>
+                                <button md-button [disabled]="!user.connected" (click)="_chatService.openChatWithUser(user)">Chat</button>
                             </md-card-actions>
                         </md-card>
                         <div style="clear: both;"></div>
@@ -33,14 +33,14 @@
         </md-tab>
         <md-tab *ngFor="let chat of _chatService.chats">
             <template md-tab-label>
-                <span *ngFor="let user of chat.chat.Users">
-                    <span *ngIf="user.Username != _userService.user.Username">{{ user.Username }}</span>
+                <span *ngFor="let user of chat.chat.users">
+                    <span *ngIf="user.username != _userService.user.username">{{ user.username }}</span>
                 </span>
             </template>
             <template md-tab-content>
                 <div class="chat-conv-container">
-                    <div class="chat-conv-msg" *ngFor="let message of chat.chat.Conversation">
-                        <b>{{ message.User.Username }}</b> : {{ message.Msg }}
+                    <div class="chat-conv-msg" *ngFor="let message of chat.chat.conversation">
+                        <b>{{ message.user.username }}</b> : {{ message.msg }}
                     </div>
                 </div>
                 <form #f="ngForm">
@@ -49,7 +49,7 @@
                                     maxlength="200"
                                     type="text"
                                     placeholder="Write a message..."
-                                    [(ngModel)]="chat.message.Msg"
+                                    [(ngModel)]="chat.message.msg"
                                     #msg="ngModel"
                                     name="msg"
                                     ngControl="msg"
@@ -58,7 +58,7 @@
                             <md-hint align="end">{{chat.message.Msg.length}} / 200 characters max</md-hint>
                         </md-input>
                         <button md-button
-                                [disabled]="chat.message.Msg.length == 0"
+                                [disabled]="chat.message.msg.length == 0"
                                 (click)="_chatService.sendMessage(chat.message)"
                                 style="width: 18%">Send</button>
                     </div>

@@ -32,9 +32,9 @@ export class UserLoginComponent implements OnInit {
         private _userService: UserService
     ) {
         this.userLogin = {
-            Token: this._userService.user.Token,
-            Username: "",
-            Password: ""
+            token: this._userService.user.token,
+            username: "",
+            password: ""
         };
     }
 
@@ -48,6 +48,6 @@ export class UserLoginComponent implements OnInit {
     }
 
     valid(): boolean {
-        return this.userLogin.Username.length >= 3 && this.userLogin.Password.length >= 3;
+        return this.userLogin.username.length >= 3 && this.userLogin.password.length >= 3;
     }
 }

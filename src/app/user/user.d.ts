@@ -1,26 +1,18 @@
 export interface User {
-    Token: string;
-    Username: string;
-    Password: string;
-    Email: string;
-    Profile: UserProfile;
-    Connected: boolean;
-    Likes: Array<Like>;
-    Meets: Array<Meet>;
-    _id: string;
-    _rev: string;
-    _key: string;
-}
-
-export interface UserProfile {
-    Age: number;
-    Gender: string;
-    Description: string;
+    id: string;
+    token: string;
+    username: string;
+    password: string;
+    email: string;
+    age: number;
+    gender: string;
+    description: string;
+    connected: boolean;
 }
 
 export interface Meet {
-    UserID: string;
-    ChatID: string;
+    userID: string;
+    chatID: string;
 }
 
 export interface Like {
@@ -29,9 +21,9 @@ export interface Like {
 }
 
 export interface UserLogin {
-    Token: string;
-    Username: string;
-    Password: string;
+    token: string;
+    username: string;
+    password: string;
 }
 
 export interface Gender {

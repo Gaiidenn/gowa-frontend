@@ -23,12 +23,14 @@ export class ChatService {
 
     openChatWithUser(user: User) {
         let chatID: string;
-        if (user._key != null) {
+        if (user.id != null) {
+            /*
             for (let i in this._userService.user.Meets) {
-                if (user._key == this._userService.user.Meets[i].UserID) {
-                    chatID = this._userService.user.Meets[i].ChatID;
+                if (user._key == this._userService.user.Meets[i].userID) {
+                    chatID = this._userService.user.Meets[i].chatID;
                 }
             }
+            */
         }
         if (chatID != null) {
             this.openChat(chatID);
@@ -56,10 +58,10 @@ export class ChatService {
     }
 
     sendMessage(message: Message) {
-        if (message.Msg.length > 0) {
+        if (message.msg.length > 0) {
             message.User = this._userService.user;
             this._rpc.PromiseCall("ChatRPCService.NewMessage", message).then(() => {
-                message.Msg = "";
+                message.msg = "";
             }).catch(err => {
                 console.log(err);
             });
@@ -69,12 +71,12 @@ export class ChatService {
     msgReceived(message: Message): boolean {
         let registered = false;
         for (let i in this.chats) {
-            if (this.chats[i].chat._key == message.ChatKey) {
-                this.chats[i].chat.Conversation.push(message);
+            if (this.chats[i].chat.id == message.chatKey) {
+                this.chats[i].chat.conversation.push(message);
             }
         }
         if (!registered) {
-            this.openChat(message.ChatKey);
+            this.openChat(message.chatKey);
         }
         return true
     }
@@ -82,13 +84,13 @@ export class ChatService {
     private registerChat(chat: Chat) {
         let exists = false;
         let message: Message = {
-            ChatKey: chat._key,
+            chatKey: chat.id,
             User: this._userService.user,
-            Msg: ""
+            msg: ""
         };
 
         for (let i in this.chats) {
-            if (this.chats[i].chat._id == chat._id) {
+            if (this.chats[i].chat.id == chat.id) {
                 exists = true;
                 this.chats[i].chat = chat;
                 this.chats[i].message = message;
@@ -105,32 +107,33 @@ export class ChatService {
 
     private checkMeets(chat: Chat) {
         //  Protection to prevent including chat rooms (more than 2 users) into user's meets array
-        if (chat.Users.length > 2) {
+        if (chat.users.length > 2) {
             return;
         }
         //  Protection to prevent stats on non-registered users
-        if (this._userService.user._key == null) {
+        if (this._userService.user.id == null) {
             return;
         }
         var user: User;
-        for (let i in chat.Users) {
-            if (chat.Users[i]._key != this._userService.user._key) {
-                user = chat.Users[i];
+        for (let i in chat.users) {
+            if (chat.users[i].id != this._userService.user.id) {
+                user = chat.users[i];
             }
         }
         let exists = false;
+        /*
         for (let i in this._userService.user.Meets) {
-            if (user._key == this._userService.user.Meets[i].UserID) {
+            if (user._key == this._userService.user.Meets[i].userID) {
                 exists = true
             }
-        }
+        }*/
         if (!exists) {
             let meet: Meet = {
-                UserID: user._key,
-                ChatID: chat._key
+                userID: user.id,
+                chatID: chat.id
             };
             console.log("pushing meet into meets array");
-            this._userService.user.Meets.push(meet);
+            //this._userService.user.Meets.push(meet);
             console.log("trying to save user");
             this._userService.save();
         }

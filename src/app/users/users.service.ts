@@ -19,9 +19,9 @@ export class UsersService  {
     updateList(user: User, oldUsername: String = null): boolean {
         console.log(user);
         let inList = false;
-        let username = oldUsername ? oldUsername : user.Username;
+        let username = oldUsername ? oldUsername : user.username;
         for (let i in this.list) {
-            if (username == this.list[i].Username) {
+            if (username == this.list[i].username) {
                 this.list[i] = user;
                 inList = true;
             }
@@ -35,7 +35,7 @@ export class UsersService  {
     removeFromList(username: string): boolean {
         let tmp: Array<User> = [];
         for (let i in this.list) {
-            if (this.list[i].Username != username) {
+            if (this.list[i].username != username) {
                 tmp.push(this.list[i]);
             }
         }

@@ -24,14 +24,14 @@ export class UserService {
     }
 
     newConnection(token: string) {
-        this.user.Token = token;
+        this.user.token = token;
         let username = this._cookieService.get("username");
         let password = this._cookieService.get("password");
         if (username && password) {
             let userLogin: UserLogin = {
-                Token: this.user.Token,
-                Username: username,
-                Password: password
+                token: this.user.token,
+                username: username,
+                password: password
             };
             this.login(userLogin);
         }
@@ -41,8 +41,8 @@ export class UserService {
         return new Promise((resolve, reject) => {
             this._rpc.PromiseCall("UserRPCService.Save", this.user).then(user => {
                 this.user = user;
-                if (this.user.Username) this._cookieService.put("username", this.user.Username);
-                if (this.user.Password) this._cookieService.put("password", this.user.Password);
+                if (this.user.username) this._cookieService.put("username", this.user.username);
+                if (this.user.password) this._cookieService.put("password", this.user.password);
                 this.checkStatus();
                 resolve();
             }).catch(error => {
@@ -52,12 +52,12 @@ export class UserService {
     }
 
     login(userLogin: UserLogin) {
-        userLogin.Token = this.user.Token;
+        userLogin.token = this.user.token;
         this._rpc.PromiseCall("UserRPCService.Login", userLogin).then(result => {
             console.log(JSON.stringify(result));
             this.user = result;
-            this._cookieService.put("username", this.user.Username);
-            this._cookieService.put("password", this.user.Password);
+            this._cookieService.put("username", this.user.username);
+            this._cookieService.put("password", this.user.password);
             this.registrationStatus = STATUS_REGISTERED;
         }).catch(error => {
             console.log(error);
@@ -65,7 +65,7 @@ export class UserService {
     }
 
     logout(): void {
-        this.user.Connected = false;
+        this.user.connected = false;
         this._rpc.PromiseCall("UserRPCService.Logout", this.user).then(() => {
             this.resetUser();
             this._cookieService.put("username", null);
@@ -81,25 +81,27 @@ export class UserService {
         if (!this.user) {
             return false;
         }
-        return !!this.user._key;
+        return !!this.user.id;
     }
 
     setUsername(username: string) {
-        this.user.Username = username;
+        this.user.username = username;
     }
 
     checkStatus(): number {
         switch (this.registrationStatus) {
             case STATUS_ANONYMOUS :
-                if (this.user.Username.length > 3) {
+                if (this.user.username.length > 3) {
                     this.registrationStatus = STATUS_NAMED;
                 }
+                break;
             case STATUS_NAMED :
-                if (this.user.Profile.Age != null && this.user.Profile.Gender != "") {
+                if (this.user.age != 0 && this.user.gender != "") {
                     this.registrationStatus = STATUS_PROFILED;
                 }
+                break;
             case STATUS_PROFILED :
-                if (this.user._key != null) {
+                if (this.user.id != null) {
                     this.registrationStatus = STATUS_REGISTERED;
                 }
                 break;
@@ -109,38 +111,26 @@ export class UserService {
 
     protected static newUser(): User {
         return {
-            Token: "",
-            Username: "",
-            Password: "",
-            Email: "",
-            Profile: {
-                Age: null,
-                Gender: "",
-                Description: ""
-            },
-            Connected: true,
-            Likes: [],
-            Meets: [],
-            _id: null,
-            _rev: null,
-            _key: null
+            id: null,
+            token: "",
+            username: "",
+            password: "",
+            email: "",
+            age: null,
+            gender: "",
+            description: "",
+            connected: true,
         };
     }
 
     resetUser() {
-        this.user.Username = "";
-        this.user.Password = "";
-        this.user.Email = "";
-        this.user.Profile = {
-            Age: 18,
-            Gender: "",
-            Description: ""
-        };
-        this.user.Connected = true;
-        this.user.Likes = [];
-        this.user.Meets = [];
-        this.user._id = null;
-        this.user._rev = null;
-        this.user._key = null;
+        this.user.id = "";
+        this.user.username = "";
+        this.user.password = "";
+        this.user.email = "";
+        this.user.age = null;
+        this.user.description = "";
+        this.user.gender = "";
+        this.user.connected = true;
     }
 }

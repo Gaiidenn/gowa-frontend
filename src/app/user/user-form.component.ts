@@ -62,11 +62,11 @@ export class UserFormComponent{
     registrationProgress(): number {
         let total = 5;
         let sum = 0;
-        if (this._userService.user.Username.length > 3) sum++;
-        if (this._userService.user.Password.length > 3) sum++;
-        if (this._userService.user.Email.length > 3) sum++;
-        if (this._userService.user.Profile.Gender != "") sum++;
-        if (this._userService.user.Profile.Description != "") sum++;
+        if (this._userService.user.username.length > 3) sum++;
+        if (this._userService.user.password.length > 3) sum++;
+        if (this._userService.user.email.length > 3) sum++;
+        if (this._userService.user.gender != "") sum++;
+        if (this._userService.user.description != "") sum++;
         return (sum/total)*100;
     }
 

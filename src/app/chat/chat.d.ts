@@ -1,14 +1,12 @@
 import {User} from '../user/user';
 export interface Chat {
-    Users: Array<User>;
-    Conversation: Array<Message>;
-    _id: string;
-    _rev: string;
-    _key: string;
+    users: Array<User>;
+    conversation: Array<Message>;
+    id: string;
 }
 
 export interface Message {
-    ChatKey: string;
+    chatKey: string;
     User: User;
-    Msg: string;
+    msg: string;
 }
