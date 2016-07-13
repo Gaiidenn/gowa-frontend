@@ -22,7 +22,7 @@ export class ChatService {
     }
 
     openChatWithUser(user: User) {
-        this._rpc.PromiseCall("ChatRPCService.OpenChat", [this._userService.user, user])
+        this._rpc.PromiseCall("ChatRPCService.OpenPrivateChat", [this._userService.user, user])
             .then(chat => {
                 this.registerChat(chat);
             })
