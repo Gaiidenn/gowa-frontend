@@ -18,10 +18,10 @@ export class ChatService {
         private _userService: UserService
     ) {
         this._rpc.Register("ChatService.msgReceived", this.msgReceived.bind(this));
-        this._rpc.Register("ChatService.registerChat", this.registerChat.bind(this));
     }
 
     openChatWithUser(user: User) {
+
         this._rpc.PromiseCall("ChatRPCService.OpenPrivateChat", [this._userService.user, user])
             .then(chat => {
                 this.registerChat(chat);
@@ -33,7 +33,7 @@ export class ChatService {
 
     openChat(chatID: string) {
         if (chatID != null) {
-            this._rpc.PromiseCall("ChatRPCService.OpenChat", chatID)
+            this._rpc.PromiseCall("ChatRPCService.GetChat", chatID)
                 .then(chat => {
                     this.registerChat(chat);
                 })
@@ -43,12 +43,30 @@ export class ChatService {
         }
     }
 
+    closeChat(chatID: string) {
+        let tmp: Array<{
+            chat: Chat;
+            message: Message;
+        }> = [];
+        for (let i in this.chats) {
+            if (this.chats[i].chat.id != chatID) {
+                tmp.push({chat: this.chats[i].chat, message: this.chats[i].message});
+            }
+        }
+        this.chats = tmp;
+    }
+
     sendMessage(message: Message) {
-        if (message.msg.length > 0) {
+        let sent = false;
+        console.log("number of chats : " + this.chats.length);
+        if (message.msg.length > 0 && !sent) {
             message.user = this._userService.user;
+            sent = true;
             this._rpc.PromiseCall("ChatRPCService.NewMessage", message).then(() => {
+                sent = false;
                 message.msg = "";
             }).catch(err => {
+                sent = false;
                 console.log(err);
             });
         }

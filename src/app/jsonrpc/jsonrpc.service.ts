@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 
 @Injectable()
 export class jsonrpcService{
-    private _maxRequest: number = 10;
+    private _maxRequest: number = 100;
     public client: jsonrpcClient;
     public server: jsonrpcServer;
 
