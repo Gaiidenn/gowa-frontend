@@ -3,6 +3,7 @@ import {NgForm} from '@angular/forms';
 import {MD_LIST_DIRECTIVES} from '@angular2-material/list';
 import {MD_PROGRESS_BAR_DIRECTIVES} from '@angular2-material/progress-bar';
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
+import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
 import {MD_RADIO_DIRECTIVES, MD_RADIO_GROUP_CONTROL_VALUE_ACCESSOR, MdUniqueSelectionDispatcher} from '@angular2-material/radio';
 import {MdToolbar} from '@angular2-material/toolbar';
 import {MdButton} from '@angular2-material/button';
@@ -22,6 +23,7 @@ import {FormGroup, FormControl} from "@angular/forms";
         MD_LIST_DIRECTIVES,
         MD_PROGRESS_BAR_DIRECTIVES,
         MD_INPUT_DIRECTIVES,
+        MD_CARD_DIRECTIVES,
         MD_RADIO_DIRECTIVES,
         MdToolbar,
         MdButton,

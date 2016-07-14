@@ -59,12 +59,13 @@ export class ChatService {
         for (let i in this.chats) {
             if (this.chats[i].chat.id == message.chatID) {
                 this.chats[i].chat.conversation.push(message);
+                registered = true;
             }
         }
         if (!registered) {
             this.openChat(message.chatID);
         }
-        return true
+        return true;
     }
 
     private registerChat(chat: Chat) {
@@ -88,8 +89,8 @@ export class ChatService {
         if (!exists) {
             this.chats.push({chat: chat, message: message});
         }
-        this.checkMeets(chat);
-        return true
+        //this.checkMeets(chat);
+        return true;
     }
 
     private checkMeets(chat: Chat) {

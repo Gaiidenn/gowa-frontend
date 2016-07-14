@@ -55,7 +55,7 @@
                                     ngControl="msg"
                                     (keyup.enter)="_chatService.sendMessage(chat.message)"
                                     style="width: 80%">
-                            <md-hint align="end">{{chat.message.Msg.length}} / 200 characters max</md-hint>
+                            <md-hint align="end">{{chat.message.msg.length}} / 200 characters max</md-hint>
                         </md-input>
                         <button md-button
                                 [disabled]="chat.message.msg.length == 0"
