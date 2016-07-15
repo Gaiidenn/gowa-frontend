@@ -19,7 +19,6 @@
                                 type="text"
                                 [(ngModel)]="tmpUser.username"
                                 placeholder="Nickname"
-                                (keyup.enter)="goToNextStep()"
                                 #username="ngModel"
                                 name="username"
                                 ngControl="username"
@@ -27,12 +26,12 @@
                         <md-hint align="end">{{tmpUser.username.length}} / 4 characters minimum</md-hint>
                     </md-input>
                     <button md-raised-button type="button" (click)="goToNextStep()" [disabled]="!username.valid || username.pristine">
-                        <span *ngIf="!_userService.user.username">Connect !</span>
-                        <span *ngIf="_userService.user.username && _userService.user.username.length > 0">Update !</span>
+                        <span *ngIf="_userService.registrationStatus == 0">Connect !</span>
+                        <span *ngIf="_userService.registrationStatus > 0">Update !</span>
                     </button>
                 </div>
                 <div *ngSwitchCase="1">
-                    Good to see you <b>{{_userService.user.Username}}</b> !! You are now able to chat with other people !
+                    Good to see you <b>{{_userService.user.username}}</b> !! You are now able to chat with other people !
                     <br>You can give more infos about you to increase your popularity :
                     " I am a
                     <md-radio-group required
@@ -62,12 +61,17 @@
                     <md-input   type="text"
                                 [(ngModel)]="tmpUser.description"
                                 placeholder="Description"
-                                (keyup.enter)="goToNextStep()"
                                 #description="ngModel"
+                                ngControl="description"
                                 name="description"
                                 style="width: 450px;">
                     </md-input> ! "
-                    <button md-raised-button type="button" (click)="goToNextStep()" [disabled]="!age.valid || age.pristine || !gender.valid || gender.pristine">Tell people who I am !</button>
+                    <button md-raised-button
+                            type="button"
+                            (click)="goToNextStep()"
+                            [disabled]="!age.valid || !gender.valid || (gender.pristine && age.pristine && description.pristine)">
+                        Tell people who I am !
+                    </button>
                 </div>
                 <div *ngSwitchCase="2">
                     Great ! Your profile looks sexier now, for sure ! If you want to keep your nickname and your statistics
@@ -94,7 +98,7 @@
                                 name="password"
                                 style="width: 180px;">
                     </md-input>
-                    <button md-raised-button type="button" (click)="goToNextStep()" [disabled]="!email.valid || email.pristine || !password.valid || password.pristine">Register !</button>
+                    <button md-raised-button type="button" (click)="goToNextStep()" [disabled]="!email.valid || !password.valid || (password.pristine && email.pristine)">Register !</button>
                 </div>
                 <div *ngSwitchCase="3">
                     Congratulations <b>{{_userService.user.username}}</b> ! You are now a member of our incridible community !

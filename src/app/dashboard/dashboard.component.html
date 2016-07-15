@@ -39,6 +39,15 @@
                 <span (click)="_chatService.closeChat(chat.chat.id)">X</span>
             </template>
             <template md-tab-content>
+                <div class="stat-container">
+                    <span>
+                        Connected : {{_usersService.sumConnected()}}
+                        (
+                            {{_userService.connectedCount.registered}} registered,
+                            {{_userService.connectedCount.notRegistered}} not registered,
+                            {{_userService.connectedCount.anonymous}} anonymous,
+                        )</span>
+                </div>
                 <div class="chat-conv-container">
                     <div class="chat-conv-msg" *ngFor="let message of chat.chat.conversation">
                         <b>{{ message.user.username }}</b> : {{ message.msg }}
