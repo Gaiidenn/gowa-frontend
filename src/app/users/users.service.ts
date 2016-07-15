@@ -1,11 +1,15 @@
-import {Injectable, OnInit} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {jsonrpcService} from '../jsonrpc/jsonrpc.service';
 import {User} from '../user/user';
 
 @Injectable()
-export class UsersService  {
+export class UsersService {
     public list: Array<User>;
-    public connectedCount: ConnectedUsersCount;
+    public connectedCount: ConnectedUsersCount = {
+        anonymous: 0,
+        notRegistered: 0,
+        registered: 0
+    };
 
     constructor(
         private _rpc: jsonrpcService
@@ -13,9 +17,6 @@ export class UsersService  {
         this._rpc.Register("UsersService.updateList", this.updateList.bind(this));
         this._rpc.Register("UsersService.removeFromList", this.removeFromList.bind(this));
         this._rpc.Register("UsersService.setConnectedCount", this.setConnectedCount.bind(this));
-    }
-
-    ngOnInit() {
         this._rpc.PromiseCall("UserRPCService.GetAll", "")
             .then(users => this.list = users)
             .catch(error => console.log(error));
@@ -29,7 +30,7 @@ export class UsersService  {
         let inList = false;
         let username = oldUsername ? oldUsername : user.username;
         for (let i in this.list) {
-            if (username == this.list[i].username) {
+            if (username == this.list[i].username || (this.list[i].token && user.token == this.list[i].token)) {
                 this.list[i] = user;
                 inList = true;
             }
@@ -51,12 +52,14 @@ export class UsersService  {
         return true
     }
 
-    setConnectedCount(data: ConnectedUsersCount) {
+    setConnectedCount(data: ConnectedUsersCount): boolean {
         this.connectedCount = data;
+        return true;
     }
 
     sumConnected(): number {
-        return this.connectedCount.anonymous + this.connectedCount.notRegistered + this.connectedCount.registered;
+        let i = this.connectedCount.anonymous + this.connectedCount.notRegistered + this.connectedCount.registered;
+        return i;
     }
 }
 

@@ -50,6 +50,7 @@ export class AppComponent {
             this._rpc.newServer("ws://" + WS_BASE_URL + "/push");
         }
         this._rpc.Register("App.setToken", this.setToken.bind(this));
+        this._rpc.Register("App.ping", this.ping.bind(this));
     }
     
     diagnostic() {
@@ -60,6 +61,10 @@ export class AppComponent {
         this._rpc.newClient("ws://" + WS_BASE_URL + "/jsonrpc", token);
         this._userService.newConnection(token);
         return true;
+    }
+
+    ping(a: boolean): boolean {
+        return a
     }
 
     logout():void {

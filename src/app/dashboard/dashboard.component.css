@@ -1,6 +1,9 @@
 md-card {
     margin: 10px;
 }
+.stats-container {
+    padding: 5px;
+}
 .md-card-container {
     margin-top: 20px;
     display: flex;

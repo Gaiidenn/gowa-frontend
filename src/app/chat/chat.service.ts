@@ -42,7 +42,7 @@ export class ChatService {
                 });
         }
     }
-
+ama
     closeChat(chatID: string) {
         let tmp: Array<{
             chat: Chat;

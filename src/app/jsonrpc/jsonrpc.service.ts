@@ -60,13 +60,17 @@ export class jsonrpcService{
     }
 
     onClientMessage(message: any): void {
+        if (message.data == "ping") {
+            this.client.ws.send("pong")
+            return
+        }
         let data = JSON.parse(message.data);
         if (this.client.request[data.id].callback != null) {
             this.client.request[data.id].callback(data.result, data.error);
         }
         this.client.request[data.id] = null;
     }
-
+//
     newServer(addr: string, initialMsg: string = "nil"): jsonrpcServer {
         this.server = {
             i: 0,
@@ -91,11 +95,20 @@ export class jsonrpcService{
     }
 
     onServerMessage(message: any): void {
+        console.log("message inc");
+        console.log(message);
+        console.log("message finish");
+        if (message.data == "ping") {
+            console.log("Ping received -> pong");
+            this.server.ws.send("pong");
+            return
+        }
         let response: jsonrpcResponse;
         let data: string;
 	    let d: jsonrpcRequest;
         d = JSON.parse(message.data);
-
+        console.log(d);
+        console.log(this.server.method);
         for (let i = 0; i < this.server.i; i++) {
             if (this.server.method[i].method == d.method) {
                 let fn = this.server.method[i].func;
@@ -105,17 +118,13 @@ export class jsonrpcService{
                         id: d.id,
                         result: result
                     };
-                    console.log(response);
                     data = JSON.stringify(response);
                     this.server.ws.send(data);
                     return;
                 }
                 response = {
                     id: d.id,
-                    error: {
-                        code: -32000,
-                        message: 'Method registered but is not a function'
-                    }
+                    error: 'Method registered but is not a function'
                 };
                 data = JSON.stringify(response);
                 this.server.ws.send(data);
@@ -125,10 +134,7 @@ export class jsonrpcService{
 
         response = {
             id: d.id,
-            error: {
-                code: -32601,
-                message: 'Method not found'
-            }
+            error: 'Method not found'
         };
         data = JSON.stringify(response);
         this.server.ws.send(data);
@@ -145,7 +151,7 @@ interface jsonrpcRequest {
 interface jsonrpcResponse {
     id: number;
     result?: any;
-    error?: jsonrpcError;
+    error?: string;
 }
 
 interface jsonrpcError {

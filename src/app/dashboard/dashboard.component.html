@@ -5,6 +5,14 @@
                 <span>All Users</span>
             </template>
             <template md-tab-content>
+                <md-card-title class="stats-container" *ngIf="_usersService">
+                        <span>
+                            <b>{{_usersService.sumConnected()}}</b> connected users :
+                            <b>{{_usersService.connectedCount.registered}}</b> registered,
+                            <b>{{_usersService.connectedCount.notRegistered}}</b> not registered,
+                            <b>{{_usersService.connectedCount.anonymous}}</b> anonymous
+                        </span>
+                </md-card-title>
                 <md-card-content>
                     <div class="md-card-container">
                         <md-card *ngIf="!_usersService.list">
@@ -39,15 +47,6 @@
                 <span (click)="_chatService.closeChat(chat.chat.id)">X</span>
             </template>
             <template md-tab-content>
-                <div class="stat-container">
-                    <span>
-                        Connected : {{_usersService.sumConnected()}}
-                        (
-                            {{_userService.connectedCount.registered}} registered,
-                            {{_userService.connectedCount.notRegistered}} not registered,
-                            {{_userService.connectedCount.anonymous}} anonymous,
-                        )</span>
-                </div>
                 <div class="chat-conv-container">
                     <div class="chat-conv-msg" *ngFor="let message of chat.chat.conversation">
                         <b>{{ message.user.username }}</b> : {{ message.msg }}
