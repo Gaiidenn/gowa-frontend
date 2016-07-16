@@ -8,6 +8,7 @@ export interface User {
     gender: string;
     description: string;
     connected: boolean;
+    registrationDate: string;
 }
 
 export interface Meet {

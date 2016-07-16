@@ -14,7 +14,7 @@ export class UserService {
     public user: User;
     public registrationStatus: number = STATUS_ANONYMOUS;
 
-    public userChange: Subject<User> = new Subject<User>();
+    public registrationStatusChange: Subject<number> = new Subject<number>();
 
     constructor(
         private _cookieService: CookieService,
@@ -41,10 +41,11 @@ export class UserService {
     }
 
     save(user: User = this.user): any {
+        user.token = this.user.token;
+        user.id = this.user.id;
         return new Promise((resolve, reject) => {
             this._rpc.PromiseCall("UserRPCService.Save", user).then(user => {
                 this.user = user;
-                this.userChange.next(this.user);
                 if (this.user.username) this._cookieService.put("username", this.user.username);
                 if (this.user.password) this._cookieService.put("password", this.user.password);
                 this.checkStatus();
@@ -60,10 +61,10 @@ export class UserService {
         this._rpc.PromiseCall("UserRPCService.Login", userLogin).then(result => {
             console.log(JSON.stringify(result));
             this.user = result;
-            this.userChange.next(this.user);
             this._cookieService.put("username", this.user.username);
             this._cookieService.put("password", this.user.password);
             this.registrationStatus = STATUS_REGISTERED;
+            this.registrationStatusChange.next(this.registrationStatus);
         }).catch(error => {
             console.log(error);
         });
@@ -76,6 +77,7 @@ export class UserService {
             this._cookieService.put("username", null);
             this._cookieService.put("password", null);
             this.registrationStatus = STATUS_ANONYMOUS;
+            this.registrationStatusChange.next(this.registrationStatus);
         }).catch(error => {
             console.log(error)
         })
@@ -86,7 +88,7 @@ export class UserService {
         if (!this.user) {
             return false;
         }
-        return !!this.user.id;
+        return !!this.user.registrationDate;
     }
 
     checkStatus(): number {
@@ -107,10 +109,11 @@ export class UserService {
                 }
                 break;
         }
+        this.registrationStatusChange.next(this.registrationStatus);
         return this.registrationStatus;
     }
 
-    protected static newUser(): User {
+    public static newUser(): User {
         return {
             id: null,
             token: "",
@@ -121,6 +124,7 @@ export class UserService {
             gender: "",
             description: "",
             connected: true,
+            registrationDate: ""
         };
     }
 
@@ -133,6 +137,6 @@ export class UserService {
         this.user.description = "";
         this.user.gender = "";
         this.user.connected = true;
-        this.userChange.next(this.user);
+        this.user.registrationDate = "";
     }
 }

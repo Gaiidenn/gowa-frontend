@@ -7,7 +7,7 @@
             <template md-tab-content>
                 <md-card-title class="stats-container" *ngIf="_usersService">
                         <span>
-                            <b>{{_usersService.sumConnected()}}</b> connected users :
+                            <b>{{_usersService.sumConnected()}}</b> users connected :
                             <b>{{_usersService.connectedCount.registered}}</b> registered,
                             <b>{{_usersService.connectedCount.notRegistered}}</b> not registered,
                             <b>{{_usersService.connectedCount.anonymous}}</b> anonymous
@@ -32,9 +32,9 @@
                             </md-card-content>
                             <md-card-actions>
                                 <button md-button [disabled]="!user.connected" (click)="_chatService.openChatWithUser(user)" *ngIf="user.username != _userService.user.username">Chat</button>
+                                <span>{{_usersService.getPeopleMet(user.id).length}} people met</span>
                             </md-card-actions>
                         </md-card>
-                        <div style="clear: both;"></div>
                     </div>
                 </md-card-content>
             </template>

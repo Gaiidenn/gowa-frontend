@@ -48,9 +48,12 @@ export class UserFormComponent{
         private _cookieService: CookieService,
         private _userService: UserService
     ) {
-        this.tmpUser = this._userService.user;
-        this.subscription = this._userService.userChange.subscribe((user) => {
-            this.tmpUser = user;
+        this.tmpUser = UserService.newUser();
+        this.subscription = this._userService.registrationStatusChange.subscribe((status) => {
+            this.registrationStep = status;
+            if (this.tmpUser != this._userService.user) {
+                this.tmpUser = this._userService.user;
+            }
         });
     }
 
@@ -61,6 +64,12 @@ export class UserFormComponent{
         }).catch( error => {
             console.log(error);
         });
+    }
+
+    editUser(i: number) {
+        if (i > 3 || i < 0) return;
+        this.tmpUser = this._userService.user;
+        this.registrationStep = i;
     }
 
     /*getDividerColor(field: FormControl): string {

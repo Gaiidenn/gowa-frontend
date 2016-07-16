@@ -8,7 +8,7 @@
         </span>
     </md-card-title>
     <md-progress-bar mode="determinate<" [value]="registrationProgress()"></md-progress-bar>
-    <md-card-content style="padding-top: 10px;">
+    <md-card-content style="padding-top: 10px; min-height: 150px;">
         <form #f="ngForm">
             <div [ngSwitch]="registrationStep">
                 <div *ngSwitchCase="0">
@@ -22,6 +22,7 @@
                                 #username="ngModel"
                                 name="username"
                                 ngControl="username"
+                                (keyup.enter)="goToNextStep()"
                                 style="width: 180px;">
                         <md-hint align="end">{{tmpUser.username.length}} / 4 characters minimum</md-hint>
                     </md-input>
@@ -103,6 +104,10 @@
                 <div *ngSwitchCase="3">
                     Congratulations <b>{{_userService.user.username}}</b> ! You are now a member of our incridible community !
                     ENJOY !
+                    <br/>
+                    <button md-raised-button (click)="editUser(0)">Edit Username</button>
+                    <button md-raised-button (click)="editUser(1)">Edit Profile</button>
+                    <button md-raised-button (click)="editUser(2)">Edit Email/Password</button>
                 </div>
                 <div *ngSwitchDefault>
                     OOPS ! It seems that something gone wrong ! (Unknown USER STATE)
@@ -110,8 +115,11 @@
             </div>
         </form>
     </md-card-content>
-    <md-card-actions>
+    <md-card-actions *ngIf="_userService.registrationStatus < 3">
         <button md-raised-button (click)="registrationStepBackward()" [disabled]="registrationStep == 0">Step back</button>
         <button md-raised-button (click)="registrationStepForward()" [disabled]="registrationStep >= _userService.registrationStatus">Step forward</button>
+    </md-card-actions>
+    <md-card-actions *ngIf="_userService.registrationStatus == 3 && registrationStep != _userService.registrationStatus">
+        <button md-raised-button (click)="editUser(3)">Cancel</button>
     </md-card-actions>
 </md-card>

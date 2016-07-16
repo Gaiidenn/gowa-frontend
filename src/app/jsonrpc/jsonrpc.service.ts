@@ -95,11 +95,7 @@ export class jsonrpcService{
     }
 
     onServerMessage(message: any): void {
-        console.log("message inc");
-        console.log(message);
-        console.log("message finish");
         if (message.data == "ping") {
-            console.log("Ping received -> pong");
             this.server.ws.send("pong");
             return
         }
@@ -107,8 +103,6 @@ export class jsonrpcService{
         let data: string;
 	    let d: jsonrpcRequest;
         d = JSON.parse(message.data);
-        console.log(d);
-        console.log(this.server.method);
         for (let i = 0; i < this.server.i; i++) {
             if (this.server.method[i].method == d.method) {
                 let fn = this.server.method[i].func;
