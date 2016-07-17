@@ -1,5 +1,5 @@
 <md-card>
-    <md-tab-group>
+    <md-tab-group #tabs>
         <md-tab>
             <template md-tab-label>
                 <span>All Users</span>
@@ -41,10 +41,10 @@
         </md-tab>
         <md-tab *ngFor="let chat of _chatService.chats">
             <template md-tab-label>
+                <div class="tab-close" (click)="_chatService.closeChat(chat.chat.id);tabs.selectedIndex = 0;">x</div>
                 <span *ngFor="let user of chat.chat.users" class="flex">
                     <span *ngIf="user.username != _userService.user.username">{{ user.username }}</span>
                 </span>
-                <span (click)="_chatService.closeChat(chat.chat.id)">X</span>
             </template>
             <template md-tab-content>
                 <div class="chat-conv-container">

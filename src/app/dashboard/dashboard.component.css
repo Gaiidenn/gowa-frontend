@@ -35,3 +35,16 @@ md-card {
     flex-wrap: wrap;
     justify-content: space-between;
 }
+.tab-close {
+    float: right;
+    width: 20px;
+    height: 20px;
+    overflow: visible;
+    margin: -13px -13px -5px -7px;
+    padding: 0px;
+    font-size: 14px;
+}
+.tab-close:hover, .tab-close:active {
+    font-size: 15px;
+    font-weight: bold;
+}
