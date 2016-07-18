@@ -1,0 +1,18 @@
+/*@import 'node_modules/@angular2-material/core/style/palette';
+@import 'node_modules/@angular2-material/core/style/theme-functions';
+
+// Person creating a theme writes variables like this:
+$md-is-dark-theme: false;
+
+$md-primary: md-palette($md-red, 500, 100, 700, $md-contrast-palettes);
+$md-accent: md-palette($md-purple, 500, 300, 800, $md-contrast-palettes);
+$md-warn: md-palette($md-red, 500, 300, 900, $md-contrast-palettes);
+$md-foreground: if($md-is-dark-theme, $md-dark-theme-foreground, $md-light-theme-foreground);
+$md-background: if($md-is-dark-theme, $md-dark-theme-background, $md-light-theme-background);
+
+.app-root {
+  .md-primary[md-raised-button] {
+    color: md-color($md-foreground, text);
+    background-color: md-color($md-primary, 700, 0.7);
+  }
+}*/

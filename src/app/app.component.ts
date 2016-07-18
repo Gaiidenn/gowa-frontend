@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {ROUTER_DIRECTIVES} from '@angular/router';
-import {MD_SIDENAV_DIRECTIVES,} from '@angular2-material/sidenav';
+import {PORTAL_DIRECTIVES} from '@angular2-material/core';
+import {MD_SIDENAV_DIRECTIVES} from '@angular2-material/sidenav';
 import {MD_LIST_DIRECTIVES} from '@angular2-material/list';
 import {MD_GRID_LIST_DIRECTIVES} from '@angular2-material/grid-list';
 import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
@@ -35,7 +36,8 @@ import {UserLoginComponent} from './user/user-login.component';
         MdIconRegistry,
         CookieService,
         jsonrpcService,
-        UserService
+        UserService,
+
     ]
 })
 export class AppComponent {

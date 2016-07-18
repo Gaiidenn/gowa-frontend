@@ -5,15 +5,15 @@
                 <span>All Users</span>
             </template>
             <template md-tab-content>
-                <md-card-title class="stats-container" *ngIf="_usersService">
+                <md-card-content>
+                    <md-card color="primary" class="stats-container" *ngIf="_usersService">
                         <span>
                             <b>{{_usersService.sumConnected()}}</b> users connected :
                             <b>{{_usersService.connectedCount.registered}}</b> registered,
                             <b>{{_usersService.connectedCount.notRegistered}}</b> not registered,
                             <b>{{_usersService.connectedCount.anonymous}}</b> anonymous
                         </span>
-                </md-card-title>
-                <md-card-content>
+                    </md-card>
                     <div class="md-card-container">
                         <md-card *ngIf="!_usersService.list">
                             Users list is loading...
@@ -31,8 +31,8 @@
                                 </p>
                             </md-card-content>
                             <md-card-actions>
+                                <p>{{_usersService.getPeopleMet(user.id).length}} people met</p>
                                 <button md-button [disabled]="!user.connected" (click)="_chatService.openChatWithUser(user)" *ngIf="user.username != _userService.user.username">Chat</button>
-                                <span>{{_usersService.getPeopleMet(user.id).length}} people met</span>
                             </md-card-actions>
                         </md-card>
                     </div>

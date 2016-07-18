@@ -1,8 +1,9 @@
+//@import '../custom-theme';
 md-card {
     margin: 10px;
 }
 .stats-container {
-    padding: 5px;
+    padding: 15px;
 }
 .md-card-container {
     margin-top: 20px;
@@ -10,11 +11,16 @@ md-card {
     width: 100%;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: space-around;
 }
 .md-card-container md-card {
     width: 250px;
     transition: position 0.5s ease-in-out;
+}
+.md-card-container md-card md-card-actions {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between
 }
 .chat-conv-container {
     display: flex;

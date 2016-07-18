@@ -7,6 +7,7 @@ import {UserService} from '../user/user.service';
 
 @Injectable()
 export class ChatService {
+    rpcSubscription: any;
     public chats: Array<{
         chat: Chat;
         message: Message;
@@ -17,7 +18,11 @@ export class ChatService {
         private _rpc: jsonrpcService,
         private _userService: UserService
     ) {
-        this._rpc.Register("ChatService.msgReceived", this.msgReceived.bind(this));
+        this.rpcSubscription = this._rpc.connectionStatusChange.subscribe((connectionStatusUp) => {
+            if (connectionStatusUp == true) {
+                this._rpc.Register("ChatService.msgReceived", this.msgReceived.bind(this));
+            }
+        });
     }
 
     openChatWithUser(user: User) {
