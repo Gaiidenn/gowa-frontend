@@ -15,17 +15,26 @@ export class UsersService {
         registered: 0
     };
 
+    rpcSubscription: any;
+
     constructor(
         private _rpc: jsonrpcService
     ) {
-        this._rpc.Register("UsersService.updateList", this.updateList.bind(this));
-        this._rpc.Register("UsersService.removeFromList", this.removeFromList.bind(this));
-        this._rpc.Register("UsersService.setConnectedCount", this.setConnectedCount.bind(this));
-        this._rpc.Register("UsersService.updatePeopleMet", this.updatePeopleMet.bind(this));
+        this.rpcSubscription = this._rpc.connectionStatusChange.subscribe((connectionStatusUp) => {
+            if (connectionStatusUp == true) {
+                this.init();
+            }
+        });
         this.init();
     }
 
     init() {
+        console.log("usersService.init");
+        this._rpc.Register("UsersService.updateList", this.updateList.bind(this));
+        this._rpc.Register("UsersService.removeFromList", this.removeFromList.bind(this));
+        this._rpc.Register("UsersService.setConnectedCount", this.setConnectedCount.bind(this));
+        this._rpc.Register("UsersService.updatePeopleMet", this.updatePeopleMet.bind(this));
+
         this._rpc.PromiseCall("UserRPCService.GetAll", "")
             .then(users => {
                 this.list = users;

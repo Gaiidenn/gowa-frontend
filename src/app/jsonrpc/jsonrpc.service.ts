@@ -1,5 +1,6 @@
 import {$WebSocket} from 'angular2-websocket/angular2-websocket';
 import {Injectable} from '@angular/core';
+import {Subject} from "rxjs/Rx";
 
 @Injectable()
 export class jsonrpcService{
@@ -7,7 +8,24 @@ export class jsonrpcService{
     public client: jsonrpcClient;
     public server: jsonrpcServer;
 
+    public connectionStatusUp: boolean = false;
+    public connectionStatusChange: Subject<boolean> = new Subject<boolean>();
+
+    checkStatus() {
+        this.connectionStatusUp = this.server && this.client ? true : false;
+        console.log("jsonRPC.checkStatus : ", this.connectionStatusUp);
+        this.connectionStatusChange.next(this.connectionStatusUp);
+    }
+    resetConn() {
+        this.server.ws.close(true);
+        this.client.ws.close(true);
+        this.server = null;
+        this.client = null;
+        this.checkStatus();
+    }
+
     newClient(addr: string, initialMsg: string = ""): jsonrpcClient {
+        console.log("jsonRPC.newClient : ", initialMsg);
         this.client = {
             i: 0,
             maxRequest: this._maxRequest,
@@ -16,13 +34,20 @@ export class jsonrpcService{
             ws: new $WebSocket(addr),
         };
         this.client.ws.onMessage(this.onClientMessage.bind(this), null);
+        this.client.ws.onError(this.onClientError.bind(this));
+        this.client.ws.onClose(this.onClientClose.bind(this));
 
         // Send a first message for initial handshake
         this.client.ws.send(initialMsg);
+        this.checkStatus();
         return this.client;
     }
 
     Call(method: string, params: any, callback?: Function): void {
+        if (!this.client) {
+            console.log("Client is not ready ! ", method, params);
+            return;
+        }
         let data: string;
         let dataObj: jsonrpcRequest;
 
@@ -60,17 +85,20 @@ export class jsonrpcService{
     }
 
     onClientMessage(message: any): void {
-        if (message.data == "ping") {
-            this.client.ws.send("pong")
-            return
-        }
         let data = JSON.parse(message.data);
         if (this.client.request[data.id].callback != null) {
             this.client.request[data.id].callback(data.result, data.error);
         }
         this.client.request[data.id] = null;
     }
-//
+    onClientError(error: any): void {
+        console.log("RPC Client Error : ", error);
+    }
+    onClientClose(): void {
+        console.log("jsonRPC.onClientClose()");
+        this.resetConn();
+    }
+
     newServer(addr: string, initialMsg: string = "nil"): jsonrpcServer {
         this.server = {
             i: 0,
@@ -79,10 +107,13 @@ export class jsonrpcService{
             ws: new $WebSocket(addr)
         };
         this.server.ws.onMessage(this.onServerMessage.bind(this), null);
+        this.server.ws.onError(this.onServerError.bind(this));
+        this.server.ws.onClose(this.onServerClose.bind(this));
 
         // Send a first empty message for initial handshake
         let test = this.server.ws.send(initialMsg);
         console.log(test);
+        this.checkStatus();
         return this.server;
     }
 
@@ -132,6 +163,13 @@ export class jsonrpcService{
         };
         data = JSON.stringify(response);
         this.server.ws.send(data);
+    }
+    onServerError(error: any): void {
+        console.log("RPC Server Error : ", error)
+    }
+    onServerClose(): void {
+        console.log("jsonRPC.onServerClose()");
+        this.resetConn();
     }
 }
 

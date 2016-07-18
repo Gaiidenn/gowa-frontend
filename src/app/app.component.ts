@@ -40,26 +40,41 @@ import {UserLoginComponent} from './user/user-login.component';
 })
 export class AppComponent {
     title = 'My GoWA2 APP !!';
+    rpcSubscription: any;
+    firstConn: boolean = true;
 
     constructor(private _cookieService:CookieService,
                 private _rpc:jsonrpcService,
                 private _userService:UserService) {
-        if (this._userService.user.token && this._userService.user.token != "") {
-            this._rpc.newServer("ws://" + WS_BASE_URL + "/push", this._userService.user.token);
-        } else {
-            this._rpc.newServer("ws://" + WS_BASE_URL + "/push");
-        }
-        this._rpc.Register("App.setToken", this.setToken.bind(this));
-        this._rpc.Register("App.ping", this.ping.bind(this));
+        this.initRPCConnection();
+        this.rpcSubscription = this._rpc.connectionStatusChange.subscribe((connectionStatusUp) => {
+            if (connectionStatusUp == false && this.firstConn == false) {
+                setTimeout(() => this.initRPCConnection(), 2000);
+            }
+        });
     }
     
     diagnostic() {
         return JSON.stringify(this._userService.user);
     }
 
+    initRPCConnection() {
+        if (this._rpc.connectionStatusUp == false) {
+            if (this._userService.user.token && this._userService.user.token != "") {
+                this._rpc.newServer("ws://" + WS_BASE_URL + "/push", this._userService.user.token);
+            } else {
+                this._rpc.newServer("ws://" + WS_BASE_URL + "/push");
+            }
+            this._rpc.Register("App.setToken", this.setToken.bind(this));
+            this._rpc.Register("App.ping", this.ping.bind(this));
+            console.log("App.initRPCConnection");
+        }
+    }
     setToken(token: string): boolean {
+        console.log("App.setToken : ", token);
         this._rpc.newClient("ws://" + WS_BASE_URL + "/jsonrpc", token);
         this._userService.newConnection(token);
+        this.firstConn = false;
         return true;
     }
 
