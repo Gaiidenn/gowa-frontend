@@ -96,7 +96,9 @@ export class jsonrpcService{
     }
     onClientClose(): void {
         console.log("jsonRPC.onClientClose()");
-        this.resetConn();
+        if (this.connectionStatusUp == true) {
+            this.resetConn();
+        }
     }
 
     newServer(addr: string, initialMsg: string = "nil"): jsonrpcServer {
@@ -169,7 +171,9 @@ export class jsonrpcService{
     }
     onServerClose(): void {
         console.log("jsonRPC.onServerClose()");
-        this.resetConn();
+        if (this.connectionStatusUp == true) {
+            this.resetConn();
+        }
     }
 }
 

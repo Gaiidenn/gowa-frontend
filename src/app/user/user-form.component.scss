@@ -1,8 +1,32 @@
 md-card {
-    margin: 10px;
+  margin: 0px 0px 15px 0px;
+  border-radius: 0px;
+}
+md-card md-card-title {
+  margin-bottom: 5px;
+}
+md-card md-card-content {
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 md-card md-card-actions {
     text-align: right;
+}
+.user-registered {
+  display:flex;
+  justify-content: space-between;
+
+  .content {
+    padding: 8px 15px;
+    background-color: #009688;
+    color: white;
+    border-radius: 3px;
+    width: auto;
+  }
+
+  .actions {
+
+  }
 }
 md-input {
     overflow: visible;

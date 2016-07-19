@@ -6,9 +6,10 @@
                 {{registrationProgress()}} % completed
             </small>
         </span>
+        <md-progress-bar mode="determinate<" [value]="registrationProgress()"></md-progress-bar>
     </md-card-title>
-    <md-progress-bar mode="determinate<" [value]="registrationProgress()"></md-progress-bar>
-    <md-card-content style="padding-top: 10px; min-height: 150px;">
+
+    <md-card-content>
         <form #f="ngForm">
             <div [ngSwitch]="registrationStep">
                 <div *ngSwitchCase="0">
@@ -101,13 +102,17 @@
                     </md-input>
                     <button md-raised-button type="button" (click)="goToNextStep()" [disabled]="!email.valid || !password.valid || (password.pristine && email.pristine)">Register !</button>
                 </div>
-                <div *ngSwitchCase="3">
-                    Congratulations <b>{{_userService.user.username}}</b> ! You are now a member of our incridible community !
-                    ENJOY !
-                    <br/>
-                    <button md-raised-button (click)="editUser(0)">Edit Username</button>
-                    <button md-raised-button (click)="editUser(1)">Edit Profile</button>
-                    <button md-raised-button (click)="editUser(2)">Edit Email/Password</button>
+                <div *ngSwitchCase="3" class="user-registered">
+                    <div class="content">
+                        Congratulations <b>{{_userService.user.username}}</b> !
+                        You are now a member of our incredible community !
+                        ENJOY !
+                    </div>
+                    <div class="actions">
+                        <button md-raised-button (click)="editUser(0)">Edit Username</button>
+                        <button md-raised-button (click)="editUser(1)">Edit Profile</button>
+                        <button md-raised-button (click)="editUser(2)">Edit Email/Password</button>
+                    </div>
                 </div>
                 <div *ngSwitchDefault>
                     OOPS ! It seems that something gone wrong ! (Unknown USER STATE)

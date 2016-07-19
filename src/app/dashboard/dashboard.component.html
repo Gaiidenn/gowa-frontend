@@ -1,21 +1,27 @@
-<md-card>
     <md-tab-group #tabs>
         <md-tab>
             <template md-tab-label>
                 <span>All Users</span>
             </template>
             <template md-tab-content>
-                <md-card-content>
-                    <md-card color="primary" class="stats-container" *ngIf="_usersService">
+                    <md-card class="stats-container" *ngIf="_usersService">
                         <span>
-                            <b>{{_usersService.sumConnected()}}</b> users connected :
-                            <b>{{_usersService.connectedCount.registered}}</b> registered,
-                            <b>{{_usersService.connectedCount.notRegistered}}</b> not registered,
-                            <b>{{_usersService.connectedCount.anonymous}}</b> anonymous
+                            <b>{{_usersService.sumConnected()}}</b> users connected
                         </span>
+                        (
+                        <small>
+                            <b>{{_usersService.connectedCount.registered}}</b> registered
+                        </small>
+                        <small>
+                            <b>{{_usersService.connectedCount.notRegistered}}</b> not registered
+                        </small>
+                        <small>
+                            <b>{{_usersService.connectedCount.anonymous}}</b> anonymous
+                        </small>
+                        )
                     </md-card>
                     <div class="md-card-container">
-                        <md-card *ngIf="!_usersService.list">
+                        <md-card *ngIf="!_usersService.list" class="user-card">
                             Users list is loading...
                         </md-card>
                         <md-card *ngIf="_usersService.list && _usersService.list.length == 0">
@@ -24,6 +30,7 @@
                         <md-card *ngFor="let user of _usersService.list">
                             <md-card-title>{{user.username}} <small *ngIf="user.connected">online</small><small *ngIf="!user.connected">offline</small></md-card-title>
                             <md-card-content>
+                                <small>{{user.id}}</small>
                                 <p>" I am a <b>{{getGenderValue(user.gender)}}</b> of <b>{{ user.age }}</b> years old. "</p>
                                 <br>
                                 <p *ngIf="user.description && user.description.length > 0">
@@ -36,7 +43,6 @@
                             </md-card-actions>
                         </md-card>
                     </div>
-                </md-card-content>
             </template>
         </md-tab>
         <md-tab *ngFor="let chat of _chatService.chats">
@@ -47,9 +53,31 @@
                 </span>
             </template>
             <template md-tab-content>
+                <md-card class="stats-container" *ngIf="_usersService">
+                    <span>
+                        Chat with :
+                        <span *ngFor="let user of chat.chat.users">
+                            <span *ngIf="user.username != _userService.user.username">{{user.username}}</span>
+                        </span>
+                    </span>
+                    <small>
+                        Created at
+                        {{getDate(chat.chat.createdAt)}}
+                    </small>
+                </md-card>
                 <div class="chat-conv-container">
-                    <div class="chat-conv-msg" *ngFor="let message of chat.chat.conversation">
-                        <b>{{ message.user.username }}</b> : {{ message.msg }}
+                    <div class="chat-conv">
+                        <div class="chat-conv-msg" *ngFor="let message of chat.chat.conversation">
+                            <span class="msg-date">
+                                {{getMsgDate(message.createdAt)}}
+                            </span>
+                            <span class="msg-user">
+                                {{ message.user.username }}
+                            </span>
+                            <span class="msg-content">
+                                {{ message.msg }}
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <form #f="ngForm">
@@ -75,4 +103,3 @@
             </template>
         </md-tab>
     </md-tab-group>
-</md-card>

@@ -23,6 +23,7 @@ export class ChatService {
                 this._rpc.Register("ChatService.msgReceived", this.msgReceived.bind(this));
             }
         });
+        this._rpc.Register("ChatService.msgReceived", this.msgReceived.bind(this));
     }
 
     openChatWithUser(user: User) {
@@ -47,7 +48,7 @@ export class ChatService {
                 });
         }
     }
-ama
+
     closeChat(chatID: string) {
         let tmp: Array<{
             chat: Chat;
@@ -105,48 +106,12 @@ ama
                 exists = true;
                 this.chats[i].chat = chat;
                 this.chats[i].message = message;
-                console.log(this.chats)
-                continue;
+                console.log(this.chats);
             }
         }
         if (!exists) {
             this.chats.push({chat: chat, message: message});
         }
-        //this.checkMeets(chat);
         return true;
-    }
-
-    private checkMeets(chat: Chat) {
-        //  Protection to prevent including chat rooms (more than 2 users) into user's meets array
-        if (chat.users.length > 2) {
-            return;
-        }
-        //  Protection to prevent stats on non-registered users
-        if (this._userService.user.id == null) {
-            return;
-        }
-        var user: User;
-        for (let i in chat.users) {
-            if (chat.users[i].id != this._userService.user.id) {
-                user = chat.users[i];
-            }
-        }
-        let exists = false;
-        /*
-        for (let i in this._userService.user.Meets) {
-            if (user._key == this._userService.user.Meets[i].userID) {
-                exists = true
-            }
-        }*/
-        if (!exists) {
-            let meet: Meet = {
-                userID: user.id,
-                chatID: chat.id
-            };
-            console.log("pushing meet into meets array");
-            //this._userService.user.Meets.push(meet);
-            console.log("trying to save user");
-            this._userService.save();
-        }
     }
 }

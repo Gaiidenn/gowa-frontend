@@ -95,11 +95,19 @@ export class UsersService {
         console.log(args);
         let userID = args[0];
         let users = args[1];
+        let exists = false;
         for (let i in this.peopleMet) {
             if (this.peopleMet[i].userID == userID) {
                 this.peopleMet[i].users = users;
                 console.log("updating peopleMet for : ", userID);
+                exists = true;
             }
+        }
+        if (!exists) {
+            this.peopleMet.push({
+                userID: userID,
+                users: users
+            });
         }
         return true;
     }

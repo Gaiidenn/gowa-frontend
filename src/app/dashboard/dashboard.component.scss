@@ -1,21 +1,31 @@
 //@import '../custom-theme';
-md-card {
-    margin: 10px;
+md-card.user-card {
+  margin: 10px;
 }
-.stats-container {
-    padding: 15px;
+md-card.stats-container {
+  margin: 0px;
+  padding: 20px;
+  border-radius: 0px;
+
+  span {
+    margin-right: 10px;
+  }
+  small {
+     margin-left: 7px;
+     margin-right: 7px;
+  }
 }
 .md-card-container {
-    margin-top: 20px;
-    display: flex;
-    width: 100%;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-around;
+  margin-top: 20px;
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
 .md-card-container md-card {
-    width: 250px;
-    transition: position 0.5s ease-in-out;
+  width: 250px;
+  transition: position 0.5s ease-in-out;
 }
 .md-card-container md-card md-card-actions {
   display: flex;
@@ -23,23 +33,26 @@ md-card {
   justify-content: space-between
 }
 .chat-conv-container {
+  height: 300px;
+  overflow-y: scroll;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #ECECEC;
+
+  .chat-conv {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: flex-end;
-    height: 300px;
-    overflow-y: scroll;
-    margin-bottom: 8px;
-    border-bottom: 1px solid #ECECEC;
-}
-.chat-conv-msg {
+  }
+  .chat-conv-msg {
     padding: 3px;
+  }
 }
 .chat-input {
-    display: flex;
-    width: 100%;
-    flex-wrap: wrap;
-    justify-content: space-between;
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 .tab-close {
     float: right;

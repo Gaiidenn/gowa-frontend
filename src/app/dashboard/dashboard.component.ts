@@ -50,4 +50,20 @@ export class DashboardComponent {
         }
         return v;
     }
+
+    getDate(date: string): string {
+        let d = new Date(parseInt(date));
+        return d.toDateString() + " " + d.toTimeString();
+    }
+
+    getMsgDate(date: string): string {
+        var result = "";
+        let d = new Date(parseInt(date));
+        let today = new Date();
+        if (d.getDate() != today.getDate()) {
+            result += d.toDateString() + " ";
+        }
+        result += d.toTimeString().substr(0, 8);
+        return result;
+    }
 }

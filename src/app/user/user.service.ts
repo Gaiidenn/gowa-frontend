@@ -37,6 +37,11 @@ export class UserService {
                 password: password
             };
             this.login(userLogin);
+            return;
+        }
+        this.checkStatus();
+        if (this.registrationStatus > STATUS_ANONYMOUS) {
+            this.save();
         }
     }
 
